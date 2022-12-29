@@ -1,4 +1,4 @@
-while inotifywait -m "$(git config --get remote.origin.url)"; do
+function update {
 	echo "update!"
 	git reset --hard
 	git pull
@@ -6,4 +6,8 @@ while inotifywait -m "$(git config --get remote.origin.url)"; do
 	echo "<pre>" >>./index.html
 	tree >>./index.html
 	git log --oneline >>./index.html
+}
+update
+while inotifywait -m "$(git config --get remote.origin.url)"; do
+	update
 done
