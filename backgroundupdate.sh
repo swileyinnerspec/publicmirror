@@ -5,7 +5,7 @@ function update {
 	cp readme index.html
 	echo "<pre>" >>./index.html
 	tree >>./index.html
-	git branch 
+	git branch >>./index.html
 	git log --oneline >>./index.html
 }
 update
