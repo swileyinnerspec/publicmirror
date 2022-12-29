@@ -1,11 +1,12 @@
 function update {
-	echo "update!"
 	git reset --hard
 	git pull
-	cp readme index.html
-	echo "<pre>" >>./index.html
+	echo "">./index.html
+	cp readme.html index.html
+	echo "<hr><h1>Reposotory data</h1><pre>" >>./index.html
 	tree >>./index.html
 	git branch >>./index.html
+	echo "</pre><hr><h2>Commits</h2><pre>" >>./index.html
 	git log --oneline >>./index.html
 }
 update
