@@ -1,7 +1,7 @@
 function update {
 	git reset --hard
 	git pull
-	echo "">./index.html
+	echo "<title>git repo</title><h1>Readme.html</h1>">./index.html
 	cp readme.html index.html
 	echo "<hr><h1>Reposotory data</h1><pre>" >>./index.html
 	tree >>./index.html
