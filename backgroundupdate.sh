@@ -1,5 +1,6 @@
 while inotifywait -m "$(git config --get remote.origin.url)"; do
 	echo "update!"
+	git reset --hard
 	git pull
 	cp readme.html index.html
 	echo "<pre>" >>./index.html
