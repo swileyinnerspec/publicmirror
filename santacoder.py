@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+#launch with santacoder.py serve
+#To use from vim run :.!santacoder.py
 import sys
 import socket
 path = "~/santa.sock"
