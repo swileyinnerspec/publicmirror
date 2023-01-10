@@ -10,7 +10,7 @@ def serve(gen,path):
     os.remove(path)
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     sock.bind(path)
-    os.chmod(path, "0777")
+    os.chmod(path, 0o666)
     sock.listen(1)
     print('listening on',path)
     while True:
