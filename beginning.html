@@ -1,0 +1,153 @@
+<head>
+<title> Tips for learning Programming and Software Engineering -- swiley.net </title>
+<body>
+<p> Programming is something everyone using a computer really should be able to do and in my opinion it's a small crime it's been made so difficult on modern devices. It's also much easier than you're often told it is, I learned when I was about 12 years old. Degrees are more for dealing with HR and getting dragged through ideas you think are unimportant, hopefully this document can be a substitute for the latter. It's based on years of teaching children and adults to program from scratch, helping junior engineers contribute to projects I've been working on, and things I've learned in the course for my own career.</p>
+<h1> Note on books </h1>
+<p> If you need a book that isn't available for free online and can't afford it or borrow it I'd recommend going to libgen (the domain changes so you'll have to google it) rather than do without. This is federal crime in the US and it's better to have a hard copy IMO but you can wait until you have a good job for that if you need to. Chances are though I'll have the book your looking for or something similar (if I haven't already lent it out to someone else.) The O'Riely "animal books" are very pricey but they're worth every penny. It's rare one of them is a dud and they're usually the best thing you'll find for learning a new language, tool, or framework.</p>
+<h1 id="basics"> The Basics </h1>
+<p> In my experience beginner programmers usually get <em> completely </em> blocked from learning because of a couple of things that seem trivial to people who have been programming for a while. These are: </p>
+<ul>
+	<li> Setting up a suitable environment </li>
+	<li> Programming language syntax </li>
+	<li> Problem decomposition and debugging </li>
+</ul>
+<h2> Some very simple stuff to get you started </h2>
+<p> I've found that scheme, because of its extreme minimalism, tends to make the first two easy to overcome. The very popular book "Structure and Interpretation of Computer Programs" can help begin with the third one. You don't have to read the whole book, if you make it through chapter 1 or maybe 2 that should be enough to get you going. Scheme (and most Lisps) are very rarely used for anything other than teaching but they're exceptionally good for that in my opinion just because it lets you remove all the distractions more complex languages create.</p>
+<p> So to get started: </p>
+<ul> 
+<li> Get an environment: Either <a href="https://www.biwascheme.org/website/i.html">Biwa scheme</a> Which you can use without installing anything (de focus the text input to execute your code) or <a href="">MIT/GNU Scheme</a> If you want something local. MIT/GNU also includes a somewhat bizarre <a href="https://www.gnu.org/software/emacs/">Emacs</a> Like editor if you want to get started down that rabbit hole. </li>
+<li> Get the book: which is available for free in HTML on <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html">MIT's website</a> Or you can borrow my copy. I tend to loan it out a lot but I should have a copy somewhere around my house. </li>
+<li> Now just go through chapter one and maybe two. The goal here is to get you used to thinking about and manipulating procedures and data structures. Once you have internalized that you can move on to a more useful language like Python or C. The book covers at least at a high level almost every concept you'd see in a normal CS degree so it's not a bad idea to at least skim the rest of it but don't feel bad moving on to something else when you're ready. Also don't get too hung up on scheme, it's an unusual language.</li>
+</ul>
+<p> All of that isn't to say scheme is useless even for back end programming. My two favorite programming forums: <a href="textboard.org">Textboard</a> and <a href="news.ycombinator.com">Hacker News</a> are both written in a scheme dialect. The latter is written in PG's personal scheme-like language: <a href="https://arclanguage.github.io/">arc</a> which is specifically intended for web development.</p>
+<h3> Debugging tips </h3> 
+<p> When you inevitably get stuck in scheme or any other language remember these rules </p>
+<ul>
+<li> You're in control of the behavior of your program. If you want to see a value for a variable at some part <em> Don't be afraid to just cram random print/display calls into it. </em> This is the fastest and most useful form of debugging called "printf debugging."</li>
+<li> Sometimes when working with new algorithms you can get hung up on the logic. It can be really helpful to just talk through what you're thinking to yourself (or an imaginary person.) This is called "rubber duck" debugging because some people like to talk to a rubber duck when they do it. </li>
+<li> For very difficult bugs in large programs you often need to resort to something called a "binary search." To perform a binary search:
+ <ol>
+  <li> Find a determining question that splits your problem space roughly in half</li>
+ <li> In the remaining half repeat the search until your problem is obvious by inspection </li>
+ </ol> This is something beginners often struggle with and the ability to do it is something most people watch for in interviews. It's one of the most useful ways to debug something
+<li> Don't be afraid to ask for help. You can use my phone number or <a href="mailto:swiley@swiley.net"> email address (swiley@swiley.net)</a>. They both go to the same place and you're not the only person asking for help learning this stuff. This is another thing people at all skill levels (including me) tend to avoid longer than they should. </li>
+<li> Also don't underestimate the utility of modern large language models. <a href="chat.openai.com">GPT davinci</a> used in the "gptchat" service is very good at answering simple questions and putting together some "MVP/tutorial" code to help you get started with new libraries/languages/projects. If you want models you can self-host personally I keep a copy of <a href="https://huggingface.co/Salesforce/codegen-2B-multi">Codegen</a> Loaded on my large machine and can share a copy of my server code for this. It's not nearly as good but can often generate some of the more annoying boilerplate for you. GPT-neox can be self hosted but the low parameter models are kind of crap and the high parameter models still can't do ZSL and need upwards of 80GB of ram just to run forward.
+</ul>
+<h2> Some slightly more useful stuff </h2>
+<p> If you're already comfortable with recursion and Turing complete languages you might try Python. Many people erroneously think of this as a beginners language but I would argue it has some of the most complex and confusing syntax so I usually tell people to try scheme first just to internalize the basics of programming. Once you have a good intuition for this though you can write complex software very quickly in it since the language runtime does so much for you. The general culture that's developed around the language is very healthy and people almost every use it for all kinds of things. It's a good language to know and one of the best for experimenting with new ideas.</p>
+<ul>
+<li> "Python cookbook" is a very commonly recommended intro to python book. I have a copy but a friend in Lynchburg is currently borrowing it. When she gives it back I can lend it to you if you want.</li>
+<li> <a href="https://docs.python.org/3/tutorial/index.html">The official tutorial</a> looks almost as good as I remember the book being. Definitely give that a look.</li>
+<li> The <a href="https://www.python.org/about/gettingstarted/">Getting started</a> page looks like it will walk you through installing python which can be complicated on Windows so you might want to have a look at that too. If your on a Debian based Linux OS just run <code> apt install python3 </code></li> 
+</ul>
+<p> Another language that's nice when you're starting out is C. It doesn't have many built-in data structures like python but the simplicity can help focus you on the underlying algorithms. It also runs much faster and on more hardware than Python. C used to be one of the more common video game development languages and it's one of the first I learned. If you remember the Wii game I wrote around when I first came to Evergreen and installed on Gabe's Wii that was written in C.</p>
+<ul>
+<li> If you're on Windows grab <a href="https://www.msys2.org/">Msys2</a> to get the GNU tools you need for producing binaries. If you're on Linux just run <code> apt install gcc </code> </li>
+<li> I learned from the book "C in easy steps." I no longer have a copy since I lent it out and it was never returned. It's kind of shallow but extremely well organized and great for beginners. I paid $7 for it at Barns and Noble back in 2006 or so.</li>
+<li> The Canonical book is "The C programming language" which served as the spec until ANSI formalized it. This ones more dense but more complete and also introduces you to some of the culture around the language which influences almost all of the system software available today. </li>
+</ul>
+<p> You may also want to have a look at either C# or Java. I did a lot of C# when I was freelancing but don't have a good tutorial to give you. Let me know if you want more info on this. </p>
+<h3> SQL</h3>
+<p> No matter which language you pick you'll usually want a database for anything non-trivial. I'm extremely partial to <a href="sqlite.org">SQLite.</a> Not only is it fast, trivially easy to set up, trivially easy to work with, portable, and popular, many languages have built-in support for it (including python.) <a href="https://www.sqlitetutorial.net/">This tutorial</a> looks decent. Most people find the SQL basics pretty easy to pick up, let me know if you need more resources for that though.
+<p> You'll want to install <a href="gitscm.org">git</a> This not only gives you a version control and collaboration tool but also provides you with a Unix shell (bash) which is good to get acquainted with.</p>
+<h1> General Software Engineering Resources </h1>
+
+<p> The most common problem decomposition technique used in corporate software is called "Object Oriented" decomposition. When you're designing software this way you try to break down your problem into data structures called "objects" that function by "sending messages" to each other. These objects have a list of internal "fields" that may or may not be visible to each other and "methods" which are functions that operate on object instances via a "receiver." That's a very poor explanation, other people have much better ones. <p> You'll also want to be able to work with databases. </p>
+<p> Here is a short list of what I would consider to be the most important books on software engineering </p>
+<ul> 
+	<li> Martin Fowler's "UML Distilled" </li>
+	<li> The Practice of Programming <em> This is a great introduction to problem decomposition</em> </li>
+	<li> You also need to know SQL and normalization. I really don't have a good resource for this off the top of my head. The book the gave us at the university was crap. Martin Fowler has some good stuff on it if you check his blog and I'm sure there are some good OCW lectures if you search on YouTube. Also the <a href="https://en.wikipedia.org/wiki/Database_normalization">Wikipedia</a> Article isn't bad. The <a href="https://en.wikipedia.org/wiki/Relational_algebra">Relational Algebra</a> article is really rough so I'll try and find something better but this is already getting pretty long.
+</ul>
+
+<h2> Extra Academic Stuff </h2>
+<p> Don't be scared by the math, CS people tend to be crap at it and it's all pretty easy.</p>
+<ul>
+<li> If there's one book in this you should read it's <a href="https://courses.cs.vt.edu/~cs3114/Fall11/book.pdf"> The data structures and algorithms</a> book. This stuff comes up in interviews all the time and going through it will make you a <em>way</em> better programmer. </li> 
+<li> Linear Algebra is just good to know. Pick any applied book on it. I went through the whole MIT <a href="https://www.youtube.com/watch?v=J7DzL2_Na80">OCW lectures</a> in addition to taking an <a href="http://www.supermath.info/LinearAlgebra.html">advanced class</a> on it. It's extremely useful and at the very least the online lectures are great sleep aids! <a href="https://www.youtube.com/watch?v=fNk_zzaMoSs">3blue1brown</a> also has a fantastic playlist that focuses on the intuition. If you do any kind of ML, data modeling, graphics, robotics, controls etc you'll want this. I used it all the time in the robotics club.</li> 
+<li> The Art of Computer Programming (I think I have the complete set, so far, set if you want to borrow part of it.) It's intended to essentially be an encyclopedia of abstract CS topics.</li>
+</ul>
+<h1> Some specifics </h1>
+
+<h2> Web backend </h2>
+<p> You can write web backend code in just about any language. Most of the backend code I've written for my personal projects has been in the Unix shell language "bash" or in C but both of these are somewhat unusual. Some people like to use Python either via the "Flask" framework or "WSCGI."</p>
+<p> Most languages besides go will need a web server to forward requests to your application, here are some useful resources: </p>
+<ul>
+<li> One of the most popular web servers is "Apache HTTP." Here is their <a href="https://httpd.apache.org/docs/2.4/getting-started.html">Getting started guide</a>. On Debian you should be able to <code> apt install Apache</code> and get a moderately sane default config.</li> 
+<li> Alternatively you can use the server I use <a href="https://www.acme.com/software/thttpd/">thttpd</a>. I prefer it because there's much less to configure but you'll probably need to run it from Linux. On Debian its again just <code> apt install thttpd </code></li>
+<li> <a href="https://blog.eduonix.com/shell-scripting/learn-cgi-scripting-using-bash-in-linux-shell-scripting/">CGI programming using shell</a> (you can use any language though such as <a href="https://docs.python.org/3/library/cgi.html">Python</a>) </li>
+<li> <a href="https://yourbasic.org/golang/http-server-example/">Web programming using GO</a> (another common "back end" language, I wrote my final project in this): </li>
+</ul>
+<h3> A warning about contemporary server side JavaScript (node or npm) and PHP </h3>
+<p> Abstraction is one of the most powerful tools a programmer has and there's a common tenancy to abuse it. For whatever reason this seems to happen most often among JavaScript and PHP programmers. The results are catastrophic. The large dependency graphs expose projects to "supply chain" attacks where malicious behavior is added to one of the many libraries they're consuming. This is a particular case of a more general problem they face where their dependencies change behavior out from underneath them. </p> 
+<p> Personally I have a strict rule of not working in PHP (you can see this on my "hire me" page on my main website) and generally I try to avoid large JavaScript projects. Don't let my cynicism turn you off to it if you're feeling brave just be prepared for what you're signing up for. I know people who have been blindsided by this.</p>
+<h2> Systems Programming </h2>
+<p> Everything has to sit on top of a machine at some point. The people who deal with the problems this creates are called "systems programmers." It might sound niche but some of the most lucrative contracts I got while freelancing came from this space. I would think of it as two separate but related things: "Embedded systems" where a computer is physically part of some application (such as a controller in an industrial automation) and more traditional systems (such as end user workstations or servers.) As computers get cheaper these two become more and more similar. Modern embedded system firmware is now often generated using the same tools used to generate OS images for servers. Bellow are some resources for understanding these:
+
+<ul> 
+<li> <a href="arduion.cc">Arduino</a> Is an increasingly common and very easy to use C++ IDE for programming cheap microcontroller boards for embedded systems. If you want a cheap board I can give you one, I have piles of hardware and have built half a dozen small robots with them over the years. It's also a fun way to get into C++ if you need some motivation. </li>
+<li> Plan 9 is an extremely Bizarre operating system but the code is very easy to read and the abstractions are usually very well chosen. While Nemo struggles with English his <a href="https://archive.org/details/plan9designintro">book</a> is how I was introduced to operating system design and it is IMO one of the better introductions.
+<li> You can build a complete Linux based Operating system with just <a href="busybox.net">Busybox</a> and <a href="kernel.org">The Linux kernel</a> itself. Special purpose Linux images were an extremely common and easy request I got while freelancing. It seems to be common and lucrative enough that many (most?) of the busybox contributors are themselves freelancing embedded systems consultants. The busybox source code is also very easy to read, I'd recommend it if you want a good understanding of the Linux userspace. </li>
+<li> <a href="buildroot.org">Buildroot</a> will generate Linux images entirely from end to end with just the make tool. It can be useful if you need more utilities than busybox provides or need to build more complex services such as Xorg and EUDev. </li>
+</ul>
+<h2> Deployment Automation </h2>
+<p> Now that everyone is moving to hosted ephemeral VMs for services the new hot thing is something called "deployment automation." The idea here is that you can have all of the underlying infrastructure for your application along with installation instructions written out in code. This way if something goes wrong you can just run a program and spin up a new instance, you can even spin up a private instance for testing new features, and you can also easily discuss and approve changes using your normal code review process. You can even set up automatons to automatically rebuild your entire testing environment as your team develops new features. This lets you catch bugs early.</p>
+
+<ul>
+<li> <a href="https://www.terraform.io">Terraform</a> lets you describe the resources you want and will mutate the world to make it match.</li>
+<li> <a href="https://ansible.com">Ansible</a> is a more procedural way to do something similar. It tends to constrain you less without giving up the idempotency.</li>
+<li> <a href="https://www.puppet.com/">Puppet</a> is actual garbage but lots of people like it and it can be good to have on your resume. </li>
+</ul>
+
+<h1> Notes about Computer Hardware, Programming Environments and "soft skills" </h1>
+<h2> Text Editors </h2>
+<p> Your text editor will become familiar enough that it almost becomes an extension of your body. Because of this most programmers tend to have extremely strong opinions about their editor. I'd recommend trying a few and keeping an open mind and then getting very good at a couple. Keep in mind that the people you work with often force you to use their favorite editor so you may be forced to learn a new one.</p>
+<p> In the past tools for auto complete, syntax highlighting, and symbol lookup used to be coupled with particular editors but that era has almost completely ended. Most editors speak common protocols/formats for these via language servers and tags files making it easy to move between editors without having to give up language support.</p>
+ <p> Here is a list of common text editors:</p>
+<ul>
+<li> <a href="vim.org">vim</a> is the editor I use mostly because dad installed it on my machine when I was young. It has a large array of motion commands, a powerful plugin and scripting system and decent syntax highlighting. It has both a graphical version and VTE version so you can easily use it on remote machines. It's more or less the "de facto" Unix text editor.</li>
+<li> <a href="https://www.gnu.org/software/emacs/">Emacs</a> Is another common programming editor that shares some ideas with Vim. It was written around the same time but is built around a special dialect of Lisp.</li>
+<li> <a href="https://www.nano-editor.og">Nano</a> Is a minimal clone of Emacs that's really not much more capable than Notepad.exe on Windows. Linus Torvalds used an early version of this to write Linux.
+<li> <a href="code.visualstudio.com">Visual studio code</a> (not to be confused with Visual Studio) is a web based editor that can be run in a special version of Chromium. It's essentially Emacs but with JavaScript and a slightly more intuitive UI.
+</ul>
+
+<h2> Hardware and Environments </h2>
+<p> Via the Church Turing thesis we know any computer can simulate any other computer provided it has enough time and ram. Modern computers are usually even more compatible than this would suggest so in practice computer hardware doesn't really matter. I'm personally using a refurbished "thinkpad 11e" right now that I think I paid maybe $80 for (including shipping.)</p>
+<p> Nonetheless there are some things that can make it easier and I'll list bellow what I've found to be most helpful</p>
+<ul> 
+	<li> Run Linux. Windows is the result of a pretty nasty consumer oriented "software market" vision Bill Gates had and the result is something that makes controlling your machine and developing software extraordinarily difficult. </li>
+	<li> And a second less abstract reason to run Linux: Window absolutely abuses the hardware. For the same task on a descent Linux based environment you might need twice the ram and many times the CPU and way way way more I/O bandwidth.</li>
+	<li> Avoid "non-free" software in general. By "non-free" I mean software that is shared without source code. For more information see FSF. This includes Apple software, especially now that the visionaries there seem to have been driven out by accountants. </li>
+	<li> Try to avoid mouse driven interfaces. They're slow, difficult to communicate and reason about, and they tend to cause "RMI" much faster than keyboard driven user interfaces. Personally I use an editor called "VIM" for all my text editing/programming. The learning curve for it is extremely steep but it's more than worth it. <li>
+	<li> <em> Use version control</em> Especially distributed version control such as git or mercurial. Almost everyone these days uses git and you'll almost certainly be expected to use it or something similar. </li>
+	<li> Get familiar with a Unix shell (bash, ash, fish etc.) It's everywhere and your life will be much easier if you can automate things </li>
+	<li> Similar to the last, learn regex. They're just super useful in all kinds of weird places. </li>
+	<li> I like having a separate physical space (preferably a separate machine as well) for when I'm trying to be productive as opposed to goofing off. Try not to cross contaminate the too different behaviors as managing your emotional state is really the biggest challenge when you're doing knowledge work like this. </li>
+	<li> Don't be afraid to create and destroy VMs. Especially if you're on Windows. <a href="virtualbox.org">Virtual box</a>is a great tool for that on Windows (since Qemu doesn't work well there) and the UI is super intuitive.</li>
+	<li> It can be super useful to have an always on Linux computer with a public IP address. If you have a good ISP and know how to configure your home network you can use a spare computer for this (vpn.swiley.net points to my house for example) but it can also be nice to just have someone else set one up (the machine your reading this on: mail.swiley.net, is one such machine.) I personally use Linenode for this, my dad likes Digital Ocean. Sometimes you can find cheaper places. Stay away from AWS and Oracle unless you want to wake up one day with no money for some confusing reason.</li>
+	<li> <a href="https://tldp.org/LDP/abs/html/">TLDP</a> has probably the best bash tutorial available. You'll likely run into bash at some point and should know it.</li>
+</ul>
+<h3> Some Linux Distros </h3>
+<p> Here are some Linux distros you can run in Virtual Box or probably install directly on your machine. If you need a thumb drive with an image on it I can probably burn you one or you can use <a href="rufus">Rufus</a>. I've never used it but I've heard good things from people who have. If you do this make sure you back up <em>Everything</em> on your computer.</p>
+<p> There isn't just one "Linux" OS because Linux on its own isn't an OS and so these are really large collaborations between many projects. On most Linux distros both the application and system software is really thought of as a single unit distributed and packaged together by some "maintainers."</p>
+<ul>
+	<li> <a href="https://linuxmint.com/edition.php?id=285">Mint</a> is a very popular "just works" distro. I think the people maintaining it are a bit sloppy so I don't use it but it's probably not bad if you're just starting out.</li>
+	<li> <a href="https://www.alpinelinux.org/">Alpine</a> This is what I use on most devices. It's a bit goofy but I like the ideas the people behind it have</li>
+	<li> <a href="https://www.debian.org">Debian</a> Is what a lot of popular distros are based on. Beginners don't like it because they don't include non-free WiFi firmware for ideological reasons. </li>
+	<li> <a href="https://www.devuan.org">Devuan</a> Is a fork of Debian that was caused by some political issues (mostly brought about by IBM/Microsoft.) I'm currently moving a lot of my machines to it but it can be a bit harry for new people.</li>
+</ul>
+<h2> Soft skills </h2>
+<ul>
+<li> You should know the git <a href="https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows">feature branch workflow.</a> This is the most common method of intra-organizational source code change management. The other common DVCS workflow is the "patch email" workflow which can be good to know but isn't something junior engineers use often unless they're contributing to some open source projects. </li>
+<li> It's a good idea to be familiar with "scrum/kanban" style collaboration. You can read the documentation included in my <a href="http://mail.swiley.net/public/tt.c">kanban</a> implementation and I'm sure there are much better explanations. The main idea is you write "tickets" when people decide work needs to get done. During planning/grooming the team might assign "points" to these which is a relative prime number guess at the difficulty. Every two weeks people get assigned tickets putting them in a "TODO" state. Every morning during a status update meeting people talk about what they're doing with the tickets in the "doing" state. When the code for a ticket is tested and merged it's moved to the "done" state. That's pretty much all there is to it, some people over think it.</li>
+<li> You should know how to write flow charts, ERDs and UML class diagrams. All of these are very useful for communicating with other engineers, managers, and clients. When I was freelancing having the project modeled in UML was a requirement. Either the client had to bring me their own documentation or I'd bill them hourly to do it for them.</li>
+</ul>
+<h2> Quick list of shortcuts</h2>
+<p> The things that made the biggest changes for me were: <ul> <li>trying to make at least one meaningful contribution to my side projects every day</li>
+<li> Using Linux as my home OS and doing as much as possible in bash </li>
+<li> Learning database normalization and object oriented decomposition </li>
+<li> The data structures and algorithms course I took </li>
+<li> Test driven development </li>
+<li> Having a separate work space that I don't mentally contaminate with goofing off </li>
+</ul>
+<p> Don't hesitate to ask Questions! </p>
