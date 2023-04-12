@@ -13,7 +13,7 @@ function update {
 	echo "</pre><hr><h1>Reposotory data</h1><pre>" >>./.index.html
 	tree >>./.index.html
 	git branch >>./.index.html
-	echo "</pre><hr><h2>Commits</h2><pre>" >>./.index.html
+	echo "</pre><h2>Commits</h2><pre>" >>./.index.html
 	git log --oneline >>./.index.html
 	echo -n "</pre><hr>Updated and copyright" >>./.index.html
 	date >>./.index.html
