@@ -20,7 +20,7 @@ function update {
 	mv .index.html index.html
 }
 update
-while 1 do
+while true; do
 	inotifywait "$(git config --get remote.origin.url)";
 	update
 done
