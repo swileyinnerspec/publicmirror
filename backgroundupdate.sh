@@ -15,7 +15,7 @@ function update {
 	git branch >>./.index.html
 	echo "</pre><h2>Commits</h2><pre>" >>./.index.html
 	git log --oneline >>./.index.html
-	echo -n "</pre><hr>Updated and copyright" >>./.index.html
+	echo -n "</pre><hr>Updated and copyright " >>./.index.html
 	date >>./.index.html
 	mv .index.html index.html
 }
