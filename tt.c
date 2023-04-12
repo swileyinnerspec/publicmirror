@@ -216,10 +216,12 @@ void newticket(int argc, char **argv) {
 void assign(int argc, char **argv) {
 	char assignee[500];
 	char points[500];
+	char *ticketname;
 	if(multiusermode){
 		if(argc<1){printf("USAGE: assign ticket [assignee [points]]\n Assign a ticket to a worker and point it.\n"); exit(-1);}
 		int t=indexforname(argv[0]);
 		if(t<0){printf("no such ticket:%s\n",argv[0]);}
+		ticketname=argv[0];
 		argc--; argv++;
 	}
 	if(argc<1){
@@ -230,8 +232,9 @@ void assign(int argc, char **argv) {
 	if(argc<3){
 		printf("The amount of \"points\" this work unit will take is only meaningful to your team. Often 1 means about a day or so and generally only prime numbers below 21 are considered meaningful. For larger units consider creating an \"epic\" ticket with children.\npoints: ");
 		fgets(points,500,stdin);
+		puts(points);
 	}
-	int t=indexforname(argv[0]);
+	int t=indexforname(ticketname);
 	tickets[t].assignee=strdup(assignee);
 	tickets[t].points=atoi(points);
 }
