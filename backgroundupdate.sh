@@ -13,7 +13,7 @@ function update {
 	rm index.html
 	echo "</pre><hr><h1>Reposotory data</h1><pre>" >>./.index.html
 	tree >>./.index.html
-	du -sh
+	du -sh >>./.index.html
 	git branch >>./.index.html
 	echo "</pre><h2>Commits</h2><pre>" >>./.index.html
 	git log --oneline >>./.index.html
