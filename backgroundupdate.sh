@@ -21,7 +21,6 @@ function update {
 	mv .index.html index.html
 	cd .git && git update-server-info && cd ..
 }
-
 update
 inotifywait -r "$(git config --get remote.origin.url)";
 exec bash "${BASH_SOURCE[0]}"
