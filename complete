@@ -2,5 +2,4 @@
 MODELPATH=$(cat /etc/gptjpath)
 args="${@:1}"
 params="${args:= -q }"
-echo $params
 gpt-j -s 1 -b 100 -m $MODELPATH --temp .5  -p "$(cat)"  $params
