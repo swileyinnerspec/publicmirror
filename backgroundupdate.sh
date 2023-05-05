@@ -18,9 +18,8 @@ function update {
 	echo -n "</pre><hr>Updated and copyright " >>./.index.html
 	date >>./.index.html
 	mv .index.html index.html
+	git update-server-info
 }
 update
-while true; do
-	inotifywait "$(git config --get remote.origin.url)";
-	update
-done
+inotifywait "$(git config --get remote.origin.url)";
+exec "${BASH_SOURCE[0]}"
