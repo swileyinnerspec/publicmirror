@@ -2,8 +2,9 @@
 function update {
 	git reset --hard
 	git pull
-	echo "<title>Public data for mail.swiley.net</title><h1>Readme.html</h1>">./.index.html
-	cp readme.html .index.html
+	echo "<title>Public data for mail.swiley.net</title><h1>Readme.html</h1>">./.head.html
+	cat .head.html readme.html >.index.html
+	rm .head.html
 	echo "<pre>" >>./.index.html
 	if [ -e tt.c ]
 	then
