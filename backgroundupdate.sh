@@ -21,5 +21,5 @@ function update {
 	cd .git && git update-server-info && cd ..
 }
 update
-inotifywait "$(git config --get remote.origin.url)";
+inotifywait -r "$(git config --get remote.origin.url)";
 exec "${BASH_SOURCE[0]}"
