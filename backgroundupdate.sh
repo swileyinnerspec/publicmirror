@@ -25,5 +25,6 @@ function update {
 
 update
 inotifywait -r "$(git config --get remote.origin.url)";
+sleep 5
 exec bash "${BASH_SOURCE[0]}"
 
