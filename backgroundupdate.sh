@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/env printf "This file should not be marked executable"
 function update {
 	git reset --hard
 	git pull
-	echo "<title>Docs repo</title><h1>Readme.html</h1>">./.index.html
-	cp readme.html .index.html
+	echo "<title>Public data for mail.swiley.net</title><h1>Readme.html</h1>">./.index.html
+	cat readme.html .index.html >>./.index.html
 	echo "<pre>" >>./.index.html
 	if [ -e tt.c ]
 	then
@@ -24,5 +24,5 @@ function update {
 
 update
 inotifywait -r "$(git config --get remote.origin.url)";
-exec "${BASH_SOURCE[0]}"
+exec bash "${BASH_SOURCE[0]}"
 
