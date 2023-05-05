@@ -1,3 +1,4 @@
+#!/bin/bash
 function update {
 	git reset --hard
 	git pull
@@ -23,5 +24,5 @@ function update {
 
 update
 inotifywait -r "$(git config --get remote.origin.url)";
-exec "${0}"
+exec "${BASH_SOURCE[0]}"
 
