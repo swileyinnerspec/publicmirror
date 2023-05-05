@@ -1,4 +1,4 @@
-#!/bin/env printf "This file should not be marked executable"
+#!/usr/bin/env printf "This file should not be marked executable"
 function update {
 	git reset --hard
 	git pull
