@@ -1,0 +1,173 @@
+diff --git a/apps/repl.py b/apps/repl.py
+new file mode 100644
+index 0000000..1ad1a6c
+--- /dev/null
++++ b/apps/repl.py
+@@ -0,0 +1,109 @@
++import wasp
++gestures = { "539": "A", "52689": "B", "5793": "C", "5318": "D",
++"562486": "E", "5248": "F", "548628": "G", "58268": "H", "52":"I",
++"5842": "J", "513": "K", "586": "L", "52938":"M", "5292": "N",
++"53971":"O", "52684": "O", "526842": "P", "526846":"Q","5268":"R","548684":"S", "56826": "T",
++"5862": "U", "593": "V", "59393": "W", "5737": "X", "5738":"Y","568486": "Z",
++"56": " ", "54": "BS", "51": "\\", "564": "\n", "5282": "\"", "579": "(", "517": ")", 
++"5646": "sym", "56428": "caps", "524": "1", "5376": "2", "5684684": "3", "586": "4", 
++"58684": "5", "57624": "6", "568":"7","5486843": "8", "52486":"9",}
++syms = { "A":"^","B":"&","C":"%","D":"$","E":"=","F":".","G":">","H":"#","I":"!","J":" ", "K":",","L":"<","M":"*","N":"}","O":"{","P":"+","Q":"?","R":";","S":".","T":"-","U":"_", "V":"~","W":"`","X":"|","Y":" ","Z":" ","\"":"'","\n":"\t"}
++closedirs = { "1":["4","2"], "2":["1","3"], "3":["2","6"], "4":["7","1"], "5":["5","5"], "6":["3","9"], "7":["4","8"], "8":["7","9"], "9":["7","9"], }
++def comparegestures(target,observed):
++    diff=0
++    for i in range(len(target)):
++        if (i >= len(observed)):
++            diff=diff+(len(target)-len(observed))
++            return diff
++        o = observed[i]
++        c = target[i]
++        if (c == o):
++            continue
++        diff = diff + 1
++    return diff
++def gesturetochar(dxdt,gestures):
++    if dxdt in gestures.keys():
++        return (gestures[dxdt],0)
++    else:
++        score = 90
++        found = None
++        for k in gestures.keys():
++            newscore = comparegestures(k,dxdt)
++            if newscore < score:
++                found = gestures[k]
++                score = newscore
++        return (found,score)
++def ctos(c):
++    dead = 3
++    if c > dead:
++        return "+"
++    if c < -dead:
++        return "-"
++    return "0"
++def dton(d):
++    return str({"+0":6,"+-":3,"0-":2,"--":1,"-0":4,"-+":7,"0+":8,"++":9,"00":5} [ctos(d[0])+ctos(d[1])])
++class Gesture:
++    def getg(self,traj,gestures,f=lambda x:x):
++        last=(0,0)
++        diff = (0,0)
++        tdir = "5"
++        alltouches=tdir
++        out = (None,200)
++        a=""
++        for t in traj:
++            if (last[0] == 0 and last[1] == 0):
++                last = t
++                continue
++            diff=(t[0]-last[0],t[1]-last[1])
++            tdir=dton(diff)
++            if(tdir == "5"):
++                continue
++            last= t
++            ldir=alltouches[len(alltouches)-1]
++            if(ldir != tdir and tdir not in closedirs[ldir]):
++                alltouches=alltouches+tdir
++            f(alltouches)
++            if(len(alltouches)) > 9:
++                    break
++        out = gesturetochar(alltouches,gestures)
++        return out,alltouches
++class ReplApp():
++    NAME = "REPL"
++    def __init__(self):
++        self.text=""
++    def foreground(self):
++        self.drawable = wasp.watch.drawable
++        self.drawable.fill()
++        wasp.system.request_event(wasp.EventMask.TOUCH | wasp.EventMask.SWIPE_UPDOWN | wasp.EventMask.SWIPE_LEFTRIGHT)
++        self.sym=False
++        self.caps=False
++    def touch(self, event):
++        self.drawable.fill()
++        trajectory = wasp.watch.touch.trajectory()
++        out,alltouches = Gesture.getg(Gesture,trajectory,gestures)
++        self.drawable.string(alltouches,0,60)
++        if(out[0] is not None):
++            self.drawable.string(out[0]+" "+str(out[1]),0,20)
++            if(out[1] == 0):
++                if(out[0] == "BS"):
++                    self.text=self.text[:-1]
++                    self.sym=False
++                elif(out[0] == "caps"):
++                    self.caps = not self.caps
++                elif(out[0] == "sym"):
++                    self.sym=True
++                else:
++                    if(self.sym and out[0] in syms.keys()):
++                        self.text=self.text+syms[out[0]]
++                        self.sym=False
++                    elif(out[0] == "\n"):
++                        exec(self.text)
++                        self.drawable.string("",0,100)
++                        self.text=""
++                    else:
++                        if(self.caps):
++                            self.text=self.text+out[0]
++                        else:
++                            self.text=self.text+out[0].lower()
++        self.drawable.string(self.text+"_",0,80)
++    def swipe(self, event): self.touch(event)
+diff --git a/wasp.toml b/wasp.toml
+index 261c16a..6d2ddfd 100644
+--- a/wasp.toml
++++ b/wasp.toml
+@@ -23,17 +23,17 @@ file = 'apps/calculator.py'
+ [[app]]
+ file = 'apps/disa_b_l_e.py'
+ 
++[[app]] 
++file = 'apps/repl.py'
++auto_load = false
++
+ [[app]] # If only one watch face is included this app can be removed
+ file = 'apps/faces.py'
+-auto_load = true
++auto_load = false
+ no_except = true
+ 
+ [[watchface]]
+ file = 'watch_faces/clock.py'
+ 
+-[[watchface]] # Requires ClockApp to also be installed
+-file = 'watch_faces/week_clock.py'
+-default = true
+-
+ [[watchface]]
+-file = 'watch_faces/chrono.py'
+\ No newline at end of file
++file = 'watch_faces/chrono.py'
+diff --git a/wasp/drivers/cst816s.py b/wasp/drivers/cst816s.py
+index ca30f85..4de835d 100644
+--- a/wasp/drivers/cst816s.py
++++ b/wasp/drivers/cst816s.py
+@@ -63,6 +63,24 @@ class CST816S:
+         if self.schedule:
+             self.schedule(self)
+ 
++    def trajectory(self):
++        """ Generates a coordinate touple as long as the screen is touched
++        Call using a for loop at the beginning of your touch or swipe event
++        You should cancel events going to other widgets if this runs as its more
++        likely the user wanted to eg type or scroll.
++        """
++        dbuf = self.dbuf
++        while True:
++            try:
++                self.i2c.readfrom_mem_into(21,1,dbuf)
++            except OSError:
++                pass
++            if ((self.dbuf[1] & 0x0f) < 1):
++                break
++            x = ((self.dbuf[2] & 0xf) <<8 )+dbuf[3]
++            y = ((self.dbuf[4] & 0xf) <<8 )+dbuf[5]
++            yield (x,y)
++
+     def get_event(self):
+         """Receive a touch event.
+ 
