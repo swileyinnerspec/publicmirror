@@ -1,0 +1,16 @@
+:set mouse=
+:set spell
+:set number
+:set rnu
+set list
+set listchars=tab:⇒⠠,trail:␣,extends:⇒,precedes:<
+:set visualbell
+:syntax on
+:set so=999
+:set incsearch
+:set hlsearch
+:set laststatus=0
+:set inccommand=nosplit
+:set modeline
+:set modelines=4
+set title
