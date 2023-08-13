@@ -13,7 +13,30 @@ function update {
 	fi
 	rm index.html
 	echo "</pre><hr><h1>Reposotory data</h1><pre>" >>./.index.html
-	tree >>./.index.html
+	tree | awk '{
+    pretext=$0
+    gsub(/│/,"")
+    gsub(/(│|├|─|└)+/," ")
+    findent = length($0)
+    gsub(/^( | )+/,"")
+    gsub(/^[[:space:]]+/,"")
+    indent=int((findent-length($0))/4+1)
+    path[indent] = $0
+
+    for (i = indent + 1; i <= prev_indent; i++) {
+        delete path[i]
+    }
+
+    prev_indent = indent
+
+    full_path = "."
+    for (i = 1; i <= indent; i++) {
+        full_path = full_path "/" path[i]
+    }
+
+    print "<a href=\"" full_path "\">" pretext "<//a>"
+echo '</pre>'
+}'>>./.index.html
 	du -sh >>./.index.html
 	git branch >>./.index.html
 	echo "</pre><h2>Commits</h2><pre>" >>./.index.html
