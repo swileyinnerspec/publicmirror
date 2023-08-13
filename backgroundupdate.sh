@@ -34,7 +34,7 @@ function update {
         full_path = full_path "/" path[i]
     }
 
-    print "<a href=\"" full_path "\">" pretext "<//a>"
+    print "<a href=\"" full_path "\">" pretext "</a>"
     next
 }
 {print $0}
