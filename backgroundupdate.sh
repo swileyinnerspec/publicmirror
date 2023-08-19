@@ -1,7 +1,7 @@
 #!/usr/bin/env printf "This file should not be marked executable"
 function update {
 	git reset --hard
-	git fetch
+	git fetch --all
 	git pull
 	echo "<title>Public data for mail.swiley.net</title><h1>Readme.html</h1>">./.head.html
 	cat .head.html readme.html >.index.html
