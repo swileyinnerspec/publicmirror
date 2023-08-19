@@ -1,0 +1,21 @@
+<html> <head> <title> Web Notes bookmarklet </title> </head>
+<body>
+	<p> This bookmarklet lets you add a sort of stickynote to a webpage that you can find later. Simply open the bookmark to view/edit the note. Activate it again to close the editor.</p>
+	<a href="javascript:
+		function gett() { return document.getElementById('x-notes').value;}
+		function savet() {localStorage.setItem('x-notes',gett());}
+		function adde(){
+			let ed = document.createElement('textarea');
+			ed.setAttribute('id','x-notes');
+			ed.style.height='20em';
+			ed.style.width='40em';
+			ed.onkeyup=savet;
+			document.body.prepend(ed);
+			ed.value=localStorage['x-notes'];
+		}
+		try {document.getElementById('x-notes').remove();} catch(e){ adde(); }
+	"> Notes </a>
+	<script>
+	</script>
+	<p> Like all bookmarklets: right click the link and click "bookmark link" to save it so you can use it on other pages. Use the view source command on this page to see the (fairly readable) source.</p>
+</body> </html>
