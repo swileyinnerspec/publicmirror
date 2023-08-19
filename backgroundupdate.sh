@@ -41,7 +41,7 @@ function update {
 ' >>./.index.html
 	du -sh >>./.index.html
 	git branch >>./.index.html
-	echo "</pre><p> Go to <a href='branches.html'>Mergable branches</a>"
+	echo "</pre><p> Go to <a href='branches.html'>Mergable branches</a>" >>./.index.html
 	echo "</pre><h2>Commits</h2><pre>" >>./.index.html
 	git log --oneline >>./.index.html
 	if [ -e ci.sh ]
