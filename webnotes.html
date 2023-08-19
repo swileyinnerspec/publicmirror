@@ -16,6 +16,7 @@
 			ed.style.display = 'block';
 			ed.style.fontSize = '100%';
 			ed.style.zIndex = '9999999999999999';
+			ed.style.position = 'fixed';
 			ed.onkeyup=savet;
 			document.body.prepend(ed);
 			ed.value=localStorage['x-notes'];
