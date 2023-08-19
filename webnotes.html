@@ -1,6 +1,6 @@
 <html> <head> <title> Web Notes bookmarklet </title> </head>
 <body>
-	<p> This bookmarklet lets you add a sort of stickynote to a webpage that you can find later. Simply open the bookmark to view/edit the note. Activate it again to close the editor.</p>
+	<p> This bookmarklet lets you add a sort of stickynote to a webpage that you can find later. Simply open the bookmark to view/edit the note. Activate it again to close the editor. You may have to scroll up to see it.</p>
 	<a href="javascript:
 		function gett() { return document.getElementById('x-notes').value;}
 		function savet() {localStorage.setItem('x-notes',gett());}
@@ -8,13 +8,13 @@
 			let ed = document.createElement('textarea');
 			ed.setAttribute('id','x-notes');
 			ed.style.height='20em';
-			ed.style.width='40em';
+			ed.style.width='30em';
 			ed.style.background = 'PaleGreen';
 			ed.style.color= 'midnightblue';
 			ed.style.margin = 'auto';
 			ed.style.padding = '2em';
 			ed.style.display = 'block';
-			ed.style.fontSize = '150%';
+			ed.style.fontSize = '120%';
 			ed.onkeyup=savet;
 			document.body.prepend(ed);
 			ed.value=localStorage['x-notes'];
@@ -23,7 +23,7 @@
 	"> Notes </a>
 	<script>
 	</script>
-	<p> Like all bookmarklets: right click the link and click "bookmark link" to save it so you can use it on other pages. Use the "view source" command on this page to see the (fairly readable) source. Most of it is styling. If you don't like the style you can use the "file -> save " command in your browser to edit it before bookmarking.</p>
-	<p> Note: Some sites (Discord for example) disable local storage (which this uses.) It also uses the "x-note" id in the document as well as local storage so if that collides with the document things might not work well. Any site that knows about this bookmarklet can read notes you put into it so they're not exactly private.</p>
+	<p> Like all bookmarklets: right click the link and click "bookmark link" to save it so you can use it on other pages. Use the "view source" command on this page to see the (fairly readable) source. Most of it is styling which is an attempt to keep it readable even if there are drop shadows like on the Fed website. If you don't like the style you can use the "file -> save " command in your browser to edit it before bookmarking.</p>
+	<p> Note: Some sites (Discord for example) disable local storage (which this uses) and others use other tricks to prevent it from working. Many probably unintentionally break it ("infinite scrolling" sites tend to not like it.) It also uses the "x-note" id in the document as well as local storage so if that collides with the document things might not work well. Any site that knows about this bookmarklet can read notes you put into it so they're not exactly private.</p>
 </body> </html>
 	
