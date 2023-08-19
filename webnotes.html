@@ -1,31 +1,50 @@
 <html> <head> <title> Web Notes bookmarklet </title> </head>
 <body>
+	<div style="height: 10em"><center> <p> This space is intentionally left blank. </p></center></div>
+	<h1> The Sticky Note Metabookmarklet </h1>
 	<p> This bookmarklet lets you add a sort of stickynote to a webpage that you can find later. Simply open the bookmark to view/edit the note. Activate it again to close the editor. You may have to scroll up to see it.</p>
-	<a href="javascript:
+	<p> You can reposition it in the page by dragging the top.</p>
+	<script>
+	</script>
+	<script id=source> 
 		function gett() { return document.getElementById('x-notes').value;}
 		function savet() {localStorage.setItem('x-notes',gett());}
+		function drage(e) { let ed = this; if( e.clientY < ed.offsetTop + 20) {
+				e.preventDefault();
+				document.onmouseup = function(e) {document.onmouseup = null; document.onmousemove = null;};
+				document.onmousemove = function(e) { ed.style.top = e.clientY; ed.style.left = e.clientX; }}}
 		function adde(){
 			let ed = document.createElement('textarea');
 			ed.setAttribute('id','x-notes');
-			ed.style.height='20em';
-			ed.style.width='30em';
-			ed.style.background = 'PaleGreen';
-			ed.style.color= 'midnightblue';
+			ed.style.height='20em'; ed.style.width='30em';
+			ed.style.background = 'PaleGreen'; ed.style.color= 'midnightblue';
 			ed.style.margin = 'auto';
 			ed.style.padding = '2em';
-			ed.style.display = 'block';
-			ed.style.fontSize = '100%';
 			ed.style.zIndex = '9999999999999999';
-			ed.style.position = 'fixed';
+			ed.style.position = 'fixed'; ed.style.display = 'block';
 			ed.onkeyup=savet;
+			ed.onkeydown = function (e) {ed.value=localStorage['x-notes'];};
+			ed.onmousedown = drage;
 			document.body.prepend(ed);
 			ed.value=localStorage['x-notes'];
 		}
 		try {document.getElementById('x-notes').remove();} catch(e){ adde(); }
-	"> Notes </a>
-	<script>
 	</script>
+
+	<a id="metabookmarklet"> Notes </a>
 	<p> Like all bookmarklets: right click the link and click "bookmark link" to save it so you can use it on other pages. Use the "view source" command on this page to see the (fairly readable) source. Most of it is styling which is an attempt to keep it readable even if there are drop shadows like on the Fed website. If you don't like the style you can use the "file -> save " command in your browser to edit it before bookmarking.</p>
 	<p> Note: Some sites (Discord for example) disable local storage (which this uses) and others use other tricks to prevent it from working. Many probably unintentionally break it ("infinite scrolling" sites tend to not like it.) It also uses the "x-note" id in the document as well as local storage so if that collides with the document things might not work well. Any site that knows about this bookmarklet can read notes you put into it so they're not exactly private.</p>
+	<h1> Metabookmarklet Utilities </h1>
+	<p> This second bookmarklet is provided to allow backing up your notes <em> For the currently opened page </em> which you should do from time to time.</p>
+	<a href="javascript:
+		 var name = window.location.hostname+'notes.txt';
+		 var u = URL.createObjectURL( new File([localStorage['x-notes']],name,{type: 'text/plain'}));
+		 var a = document.createElement('a');
+		 a.href = u;
+		 a.download = name;
+		 document.body.appendChild(a);
+		 a.click();
+">Backup notes</a>
+	<p> This only works in Firefox and maybe Chrome. For Safari you can write your own. Probably try appending an anchor to the document with the blob and calling its click() method. </p>
+	<script> document.getElementById("metabookmarklet").href="javascript:"+document.getElementById("source").innerHTML;</script>
 </body> </html>
-	
