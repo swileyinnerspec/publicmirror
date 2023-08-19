@@ -1,6 +1,7 @@
 #!/usr/bin/env printf "This file should not be marked executable"
 function update {
 	git reset --hard
+	git fetch
 	git pull
 	echo "<title>Public data for mail.swiley.net</title><h1>Readme.html</h1>">./.head.html
 	cat .head.html readme.html >.index.html
@@ -65,9 +66,9 @@ function branches () {
 		echo "<h2 name=\"$branch\"> diff for $branch </h2><pre>" >>./branches.html
 		if which ansi2html
 		then
-		git diff --color "$branch" |ansi2html -w -n >>./branches.html
+		git diff -R --color "$branch" |ansi2html -w -n >>./branches.html
 		else
-		git diff "$branch"  >>./branches.html
+		git diff -R "$branch"  >>./branches.html
 		fi
 		echo "</pre>" >>./branches.html
 	done
