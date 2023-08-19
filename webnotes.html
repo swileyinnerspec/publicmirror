@@ -9,6 +9,12 @@
 			ed.setAttribute('id','x-notes');
 			ed.style.height='20em';
 			ed.style.width='40em';
+			ed.style.background = 'PaleGreen';
+			ed.style.color= 'midnightblue';
+			ed.style.margin = 'auto';
+			ed.style.padding = '2em';
+			ed.style.display = 'block';
+			ed.style.fontSize = '150%';
 			ed.onkeyup=savet;
 			document.body.prepend(ed);
 			ed.value=localStorage['x-notes'];
@@ -17,7 +23,7 @@
 	"> Notes </a>
 	<script>
 	</script>
-	<p> Like all bookmarklets: right click the link and click "bookmark link" to save it so you can use it on other pages. Use the view source command on this page to see the (fairly readable) source.</p>
+	<p> Like all bookmarklets: right click the link and click "bookmark link" to save it so you can use it on other pages. Use the "view source" command on this page to see the (fairly readable) source. Most of it is styling. If you don't like the style you can use the "file -> save " command in your browser to edit it before bookmarking.</p>
 	<p> Note: Some sites (Discord for example) disable local storage (which this uses.) It also uses the "x-note" id in the document as well as local storage so if that collides with the document things might not work well. Any site that knows about this bookmarklet can read notes you put into it so they're not exactly private.</p>
 </body> </html>
 	
