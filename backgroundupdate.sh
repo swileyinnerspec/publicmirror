@@ -5,6 +5,7 @@ function update {
 	echo "<title>Public data for mail.swiley.net</title><h1>Readme.html</h1>">./.head.html
 	cat .head.html readme.html >.index.html
 	rm .head.html
+	rm branches.html
 	echo "<pre>" >>./.index.html
 	if [ -e tt.c ]
 	then
