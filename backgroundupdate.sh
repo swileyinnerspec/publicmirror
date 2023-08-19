@@ -1,4 +1,7 @@
 #!/usr/bin/env printf "This file should not be marked executable"
+function eschtml () {
+	sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g; s/'"'"'/\&#39;/g'
+}
 function update {
 	git reset --hard
 	git branch -r | grep -v '\->' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
@@ -46,12 +49,11 @@ function update {
 	git branch >>./.index.html
 	echo "</pre><p> Go to <a href='branches.html'>Mergable branches</a>" >>./.index.html
 	echo "</pre><h2>Commits</h2><pre>" >>./.index.html
-	git log --oneline >>./.index.html
+	git log --oneline | eschtml >>./.index.html
 	if [ -e ci.sh ]
 	then
 		d="$(date +%s)"
-		(./ci.sh >./ci.$d.log) &
-		echo "<a href=\"ci.$d.log\">ci log</a>" >>./.index.html
+		(./ci.sh >./ci.$d.log >>./.index.html) & #even after the move it should be fine.
 	fi
 	echo -n "</pre><hr>Updated and copyright " >>./.index.html
 	date >>./.index.html
@@ -67,9 +69,9 @@ function branches () {
 		echo "<h2 name=\"$branch\"> diff for $branch </h2><pre>" >>./branches.html
 		if which ansi2html
 		then
-		git diff -R --color "$branch" |ansi2html -w -n >>./branches.html
+		git diff -R --color "$branch" | eschtml |ansi2html -w -n >>./branches.html
 		else
-		git diff -R "$branch"  >>./branches.html
+		git diff -R "$branch"  | eschtml >>./branches.html
 		fi
 		echo "</pre>" >>./branches.html
 	done
