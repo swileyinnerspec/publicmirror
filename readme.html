@@ -5,10 +5,20 @@ It is automatically updated on push.
 <ul>
 	<li> Only want to see the data from the latest commit on master. </li>
 	<li> Only care about the commit history for master. </li>
+	<li> Only care about diffs between master and unmerged branches. </li>
 	<li> Will clone the repo if they need to do more interesting things. </li>
 	<li> The html will be hosted on the same machine the bare repo is (this allows automatic updates via inotifywait.)
 </ul>
-<o> So the script generates a tree view with clickable links, the commit history, and some other statistics and then copies that with the readme into an index.html for you. If you place this with the repo itself people can clone it and send you patches. try it! <pre> git clone http://mail.swiley.net/public/ </pre></p>
+<p> It may sound minimal (and it is) but there are still many features: </p>
+<ul>
+	<li> Online commit history </li>
+	<li> Online browsing of files at HEAD of master </li>
+	<li> Online branch diff viewing </li>
+	<li> CICD </li>
+	<li> Online ticket integration </li>
+	<li> No need for complex web hosts, static hosting is fine! </li>
+</ul>
+<p> So the script generates a tree view with clickable links, the commit history, and some other statistics and then copies that with the readme into an index.html for you. If you place this with the repo itself people can clone it and send you patches. try it! <pre> git clone http://mail.swiley.net/public/ </pre></p>
 <p> It also supports todo.ini data from my ticket tracker (tt) program. </p>
 <h2> TT Ticket Tracker </h2>
 <p> tt.c is the source to a tool called "Ticket Tracker." It can be used to track tickets for an agile-style software development project in a simple database called todo.ini. The usage info will tell you more. </p>

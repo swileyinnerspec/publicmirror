@@ -41,15 +41,40 @@ function update {
 ' >>./.index.html
 	du -sh >>./.index.html
 	git branch >>./.index.html
+	echo "</pre><p> Go to <a href='branches.html'>Mergable branches</a>"
 	echo "</pre><h2>Commits</h2><pre>" >>./.index.html
 	git log --oneline >>./.index.html
+	if [ -e ci.sh ]
+	then
+		d="$(date +%s)"
+		(./ci.sh >./ci.$d.log) &
+		echo "<a href=\"ci.$d.log\">ci log</a>" >>./.index.html
+	fi
 	echo -n "</pre><hr>Updated and copyright " >>./.index.html
 	date >>./.index.html
 	mv .index.html index.html
 	cd .git && git update-server-info && cd ..
 }
+function branches () {
+	rm branches.html
+	echo "<head><title>Branches</title></head>" >./branches.html
+	echo "<h1>Branches</h1>" >>./branches.html
+	for branch in $(git branch --no-merged)
+	do
+		echo "<h2 name=\"$branch\"> diff for $branch </h2><pre>" >>./branches.html
+		if which ansi2html
+		then
+		git diff --color "$branch" |ansi2html -w -n >>./branches.html
+		else
+		git diff "$branch"  >>./branches.html
+		fi
+		echo "</pre>" >>./branches.html
+	done
+}
 
 update
+branches
+
 inotifywait -r "$(git config --get remote.origin.url)";
 sleep 5
 exec bash "${BASH_SOURCE[0]}"
