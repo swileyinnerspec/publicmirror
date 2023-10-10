@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+//#define DBLINE //
+#define DBLINE 
 enum state_t {TODO =1, DOING, DONE};
 char *state_strings[] = { "INVALID", "TODO","DOING","DONE"};
 enum type_t {TICKET=1, COMMENT,EPIC,SCRUM};
@@ -30,12 +32,13 @@ typedef struct {
 } ticket;
 
 #define MAX_TICKETS 10000
-ticket tickets[MAX_TICKETS]; 
+ticket tickets[MAX_TICKETS];
 int lastticket=-1;
 int multiusermode=1;
 char *scrum="";
 int fortnight=86400*14;
 char *dbpath;
+char *adbpath;
 int savedb=0;
 int indexforname(char *name){
 	for(int i=0;i<=lastticket;i++)if(!strcmp(name,tickets[i].name))return i;
@@ -45,6 +48,7 @@ void error(char *m,int n){
 	printf("%s,%d\n",m,n);
 	exit(1);
 }
+void check(int expression, char *m) {if(!expression){error(m,expression);}}
 void invalidkey(int lnum,char *name,char *key,char *val){
 	printf("#Incompatible Datum at line number:%d will be dropped.\n",lnum);
 	if(!strcmp(name,"global")) printf("%s=%s\n#Hint:open a [ticket] first.",key,val);
@@ -185,6 +189,7 @@ void usage(void){
 	printf(" deadlines: write an appointment/calendar/diary file containing expiration dates for all tickets in the database\n");
 	//printf(" delta: export tickets that differ between a joined (see below) db and the primary.\n");
 	//printf("In addition the special \"join\" subcommand may precede others allowing the temporary joining of an archive file or external boards.\n");
+	printf(" archive: move ticket to todo.old.ini.\n");
 	printf(" workflow: advice on using tt in your workflow.\n");
 	printf(" newscrum: generate a new scrum ticket with $USER as the assignee and set the current scrum to it.\n");
 	printf("If scrum is set in global options some reports will be restricted to tickets in that scrum.\n");
@@ -213,29 +218,33 @@ void newticket(int argc, char **argv) {
 	tickets[lastticket].state=TODO;
 	tickets[lastticket].type=TICKET;
 }
+void delticket(int t) {
+	check(t<=lastticket,"Ticket index is beyond end of ticket list");
+	check(t>=0,"Ticket index is before beginning of ticket list");
+	for(;t<lastticket;t++){
+		tickets[t]=tickets[t+1];
+	}
+	lastticket-=1;
+}
 void assign(int argc, char **argv) {
-	char *assignee = calloc(500,1);
+	char assignee[500];
 	char points[500];
-	char *ticketname;
 	if(multiusermode){
 		if(argc<1){printf("USAGE: assign ticket [assignee [points]]\n Assign a ticket to a worker and point it.\n"); exit(-1);}
 		int t=indexforname(argv[0]);
 		if(t<0){printf("no such ticket:%s\n",argv[0]);}
-		ticketname=argv[0];
 		argc--; argv++;
+		if(argc<2){
+			printf("The assignee will be responsible for completing the specified work unit, preferably before etime or the end of the scrum\nassignee: ");
+			fgets(assignee,500,stdin);
+			strcpy(assignee,strdup(argv[0]));
+		}
 	}
-	assignee=argv[0];
-	if(argc<1){
-		printf("The assignee will be responsible for completing the specified work unit, preferably before etime or the end of the scrum\nassignee: ");
-		fgets(assignee,500,stdin);
-		strcpy(assignee,strdup(argv[0]));
-	}
-	if(argc<1){
+	if(argc<3){
 		printf("The amount of \"points\" this work unit will take is only meaningful to your team. Often 1 means about a day or so and generally only prime numbers below 21 are considered meaningful. For larger units consider creating an \"epic\" ticket with children.\npoints: ");
 		fgets(points,500,stdin);
-		puts(points);
 	}
-	int t=indexforname(ticketname);
+	int t=indexforname(argv[0]);
 	tickets[t].assignee=strdup(assignee);
 	tickets[t].points=atoi(points);
 }
@@ -293,6 +302,20 @@ void comment(int argc,char **argv){
 		}else { printf("Too many comments already.\n");exit(-2);}
 	} else {printf("No such ticket.\n");exit(-1);}
 }
+void archive(int argc,char **argv){
+	if(argc<1){printf("USAGE: archive ticket \n Move ticket to %s\n",adbpath); exit(-1);}
+	int t=indexforname(argv[0]);
+	if(t>0){
+		FILE *f=fopen(adbpath,"a");
+		if(f != NULL) writeoutticket(f,tickets[t]);
+		if(f != NULL && !fclose(f)){
+			delticket(t);
+		} else {
+			printf("Failed to archive ticket, it has not been deleted from %s, please check permissions.\n",dbpath);
+		}
+
+	} else {printf("No such ticket.\n");exit(-1);}
+}
 void newscrum(int argc, char **argv){
 	printf("TODO");
 }
@@ -310,12 +333,15 @@ void todo(int argc,char **argv){
 	else if(!strcmp(argv[0],"newscrum")){newscrum(argc-1,argv+1);savedb=1;}
 	else if(!strcmp(argv[0],"kanban")){report(argc-1,argv+1,1);}
 	else if(!strcmp(argv[0],"report")){report(argc-1,argv+1,0);}
-	else if(!strcmp(argv[0],"comment")){comment(argc-1,argv+1);}
+	else if(!strcmp(argv[0],"comment")){comment(argc-1,argv+1);savedb=1;}
+	else if(!strcmp(argv[0],"archive")){archive(argc-1,argv+1);savedb=1;}
 	else {usage();exit(1);}
 }
 int main(int argc, char **argv){
 	dbpath="./todo.ini";
+	adbpath="./todo.old.ini";
 	if(getenv("TTDB")!=NULL) dbpath=strdup(getenv("TTDB"));
+	if(getenv("TTADB")!=NULL) adbpath=strdup(getenv("TTADB"));
 	FILE *f=fopen(dbpath,"r");
 	if(f!=NULL){
 		readintickets(f);
