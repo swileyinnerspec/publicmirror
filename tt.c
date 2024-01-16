@@ -5,8 +5,8 @@
 #include <time.h>
 //#define DBLINE //
 #define DBLINE 
-enum state_t {TODO =1, DOING, DONE};
-char *state_strings[] = { "INVALID", "TODO","DOING","DONE"};
+enum state_t {TODO =1, DOING, DONE,WONT};
+char *state_strings[] = { "INVALID", "TODO","DOING","DONE","WONT"};
 enum type_t {TICKET=1, COMMENT,EPIC,SCRUM};
 char *type_strings[] = { "INVALID", "TICKET","EPIC","SCRUM"};
 #define MAXCOMMENTS 20
@@ -89,6 +89,7 @@ void updatefield(int lnum,char *l,int t){
 		if(!strcasecmp(l,"state")){
 			if(!strcasecmp(val,"TODO"))tickets[t].state=TODO;
 			else if(!strcasecmp(val,"DOING"))tickets[t].state=DOING;
+			else if(!strcasecmp(val,"WONT"))tickets[t].state=WONT;
 			else if(!strcasecmp(val,"DONE"))tickets[t].state=DONE;
 			else invalidkey(lnum,tickets[t].name,l,val);
 		}else if(!strcasecmp(l,"type")){
@@ -97,7 +98,7 @@ void updatefield(int lnum,char *l,int t){
 			else if(!strcasecmp(val,"SCRUM"))tickets[t].type=SCRUM;
 			else invalidkey(lnum,tickets[t].name,l,val);
 		} else if(!strcasecmp(l,"points"))tickets[t].points=atoi(val);
-		else if(!strcasecmp(l,"otime"))tickets[t].ctime=atoi(val);
+		else if(!strcasecmp(l,"otime"))tickets[t].otime=atoi(val);
 		else if(!strcasecmp(l,"dtime"))tickets[t].dtime=atoi(val);
 		else if(!strcasecmp(l,"ctime"))tickets[t].ctime=atoi(val);
 		else if(!strcasecmp(l,"etime"))tickets[t].etime=atoi(val);
@@ -186,6 +187,7 @@ void usage(void){
 	printf(" import: read tickets from stdin, overwritting data in db (missing data will merge, so you can run show followed by import and enter new values for the fields this way.)\n");
 	printf(" kanban: show ticket summaries in swimlanes, tickets closed more than a scrum/fortnight ago will be hidden.\n");
 	printf(" report: write out historical report for tickets one per line, if a scrum is specified the report will be restricted to it. Note that some tickets may have been moved to a new scrum. The difference in the scrum ticket points and the points of the closed tickets can tell you how many.\n"); 
+	printf(" stats: write out statistics report for current tickets.\n"); 
 	printf(" deadlines: write an appointment/calendar/diary file containing expiration dates for all tickets in the database\n");
 	//printf(" delta: export tickets that differ between a joined (see below) db and the primary.\n");
 	//printf("In addition the special \"join\" subcommand may precede others allowing the temporary joining of an archive file or external boards.\n");
@@ -292,6 +294,41 @@ void report(int argc, char **argv,int swimlane){
 		}
 	}
 }
+void stats(void){ //TODO: allow statistics to be reported over sliding time window.
+	char *scrumname=scrum;
+	time_t t=time(NULL);
+	long long catimetoclose=0;
+	long long catimedoing=0;
+	int totalcount=0;
+	int opencount=0;
+	int doingcount=0;
+	int donecount=0;
+	long long caage=0;//Average age of unclosed tickets
+	const long long timediv=60*60;//an hour
+	//TODO: weight by points.
+	for(int i=0;i<=lastticket;i++){
+		if(scrumname==NULL||strcmp(scrumname,"")||tickets[i].scrum==NULL||!strcmp(tickets[i].scrum,scrumname)){
+			if(tickets[i].otime==0) continue; //tickets with otime of zero are ignored for statistics
+			long long timetoclose=tickets[i].ctime-tickets[i].otime;
+			long long timetodoing=tickets[i].dtime-tickets[i].otime;
+			long long age=t-tickets[i].otime;
+			if(tickets[i].state==DONE){
+				catimetoclose=(timetoclose + (donecount*catimetoclose))/(donecount+1);
+				donecount++;
+			}else {
+				caage=(age +(opencount*caage))/(opencount+1);
+				opencount++;
+			}
+			if(tickets[i].state==DOING){
+				catimedoing=(timetodoing + (doingcount*catimedoing))/(doingcount+1);
+				doingcount++;
+			}
+			totalcount++;
+		}
+	}
+	printf("toclose\ttodoing\tavg age\topen\tdoing\tdone\ttotal\t\t Time in hours.\n");
+	printf("%lld\t%lld\t%lld\t%d\t%d\t%d\t%d\n",catimetoclose/timediv,catimedoing/timediv,caage/timediv,opencount,doingcount,donecount,totalcount);
+}
 void comment(int argc,char **argv){
 	if(argc<2){printf("USAGE: comment ticket \"comment\"\n add a short comment to a ticket.\n"); exit(-1);}
 	int t=indexforname(argv[0]);
@@ -316,6 +353,22 @@ void archive(int argc,char **argv){
 
 	} else {printf("No such ticket.\n");exit(-1);}
 }
+void wontticket(int argc,char **argv){
+	if(argc<1){printf("USAGE: wont ticket \n Mark ticket as wontdo and move ticket to %s\n",adbpath); exit(-1);}
+	int t=indexforname(argv[0]);
+	tickets[t].state=WONT;
+	tickets[t].ctime=time(NULL);
+	if(t>0){
+		FILE *f=fopen(adbpath,"a");
+		if(f != NULL) writeoutticket(f,tickets[t]);
+		if(f != NULL && !fclose(f)){
+			delticket(t);
+		} else {
+			printf("Failed to archive ticket, it has not been deleted from %s, please check permissions.\n",dbpath);
+		}
+
+	} else {printf("No such ticket.\n");exit(-1);}
+}
 void newscrum(int argc, char **argv){
 	printf("TODO");
 }
@@ -323,11 +376,13 @@ void todo(int argc,char **argv){
 	if(argc<1) {usage(); exit(1);}
 	if(!strcmp(argv[0],"workflow")){workflow();exit(0);}
 	if(!strcmp(argv[0],"check")){exit(0);}
+	if(!strcmp(argv[0],"stats")){stats();exit(0);}
 	else if(!strcmp(argv[0],"normalize")){savedb=1;}
 	else if(!strcmp(argv[0],"create")){newticket(argc-1,argv+1);savedb=1;}
 	else if(!strcmp(argv[0],"assign")){assign(argc-1,argv+1);savedb=1;}
 	else if(!strcmp(argv[0],"do")){doticket(argc-1,argv+1);savedb=1;}
 	else if(!strcmp(argv[0],"close")){closeticket(argc-1,argv+1);savedb=1;}
+	else if(!strcmp(argv[0],"wont")){wontticket(argc-1,argv+1);savedb=1;}
 	else if(!strcmp(argv[0],"import")){readintickets(stdin);savedb=1;}
 	else if(!strcmp(argv[0],"show")){showticket(argc-1,argv+1);}
 	else if(!strcmp(argv[0],"newscrum")){newscrum(argc-1,argv+1);savedb=1;}
