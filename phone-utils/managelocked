@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+description="manage sleeping while phone is locked"
+start() {
+	ebegin "starting $RC_SVCNAME"
+	start-stop-daemon --start --make-pidfile --background --pidfile /run/$RC_SVCNAME.pid --exec /usr/bin/managelock
+	eend $?
+}
+
+stop() {
+	ebegin "stopping $RC_SVCNAME"
+	start-stop-daemon --stop --pidfile /run/$RC_SVCNAME.pid
+	chvt 7
+	echo "ATCSQ" | atinout - /dev/EG25.AT -
+	DISPLAY=:0 xrandr --output DSI-1 --auto
+	(sleep 5; rm ./openrc/started/managelocked)&
+	eend $?
+}

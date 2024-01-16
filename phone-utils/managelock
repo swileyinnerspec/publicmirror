@@ -1,0 +1,18 @@
+#!/bin/bash
+chvt 8
+oldcons () {
+ nmcli -t -f NAME,TIMESTAMP con | sort -t: -nk2 | tail -n2 | cut -f1 -d :
+}
+reconnect() {
+ echo reconnecting...
+ for c in $(oldcons); do nmcli c up $c; done
+}
+while true; do
+	echo "sleeping"
+	rtcwake -s 240 -m mem
+	reconnect
+	sleep 30
+	if [ ! -c /dev/EG25.AT ]; then 
+		reboot
+	fi
+done

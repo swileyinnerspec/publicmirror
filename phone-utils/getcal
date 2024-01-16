@@ -1,0 +1,2 @@
+#!/bin/bash
+emacs -batch -l ~/stuff/diary-batch.el -e diary-batch
