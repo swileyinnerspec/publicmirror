@@ -1,4 +1,5 @@
 //Kanban boards
+#define _GNU_SOURCE 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,10 +7,12 @@
 //#define DBLINE //
 #define DBLINE 
 enum state_t {TODO =1, DOING, DONE,WONT};
-char *state_strings[] = { "INVALID", "TODO","DOING","DONE","WONT"};
+char *state_strings[] = { "INVALID", "TODO","DOING","DONE","WONT","BACKLOG"};
 enum type_t {TICKET=1, COMMENT,EPIC,SCRUM};
 char *type_strings[] = { "INVALID", "TICKET","EPIC","SCRUM"};
 #define MAXCOMMENTS 20
+#define MAXSUPS 40
+#define MAX_TICKETS 10000
 typedef struct {
  char *name;
  char *desc;
@@ -28,10 +31,11 @@ typedef struct {
  time_t etime;
  int ephemeral;
  char *comments[MAXCOMMENTS];
+ char *sups[MAXSUPS];
+ int supcount;
  int commentcount;
 } ticket;
 
-#define MAX_TICKETS 10000
 ticket tickets[MAX_TICKETS];
 int lastticket=-1;
 int multiusermode=1;
@@ -78,6 +82,14 @@ void updatefield(int lnum,char *l,int t){
 	else if(!strcasecmp(l,"parent"))tickets[t].parent=val;
 	else if(!strcasecmp(l,"closemesg"))tickets[t].closemesg=val;
 	else if(!strcasecmp(l,"scrum"))tickets[t].scrum=val;
+	else if(strcasestr(l,"sup")==l){
+		if(tickets[t].supcount<MAXCOMMENTS){
+			tickets[t].supcount++;
+			tickets[t].sups[tickets[t].supcount-1]=val;
+		}else{
+			error("too many status updates at line",lnum);
+		}
+	}
 	else if(l[0]=='#'){
 		if(tickets[t].commentcount<MAXCOMMENTS){
 			tickets[t].commentcount++;
@@ -103,7 +115,7 @@ void updatefield(int lnum,char *l,int t){
 		else if(!strcasecmp(l,"ctime"))tickets[t].ctime=atoi(val);
 		else if(!strcasecmp(l,"etime"))tickets[t].etime=atoi(val);
 		else if(!strcasecmp(l,"priority"))tickets[t].priority=atoi(val);
-		else{puts("very");invalidkey(lnum,tickets[t].name,l,val);}
+		else{invalidkey(lnum,tickets[t].name,l,val);}
 		free(val);
 	}
 }
@@ -151,6 +163,9 @@ void writeoutticket(FILE *f,ticket t){
 	for(int i=0;i<t.commentcount ;i++){
 		fprintf(f,"%s\n",t.comments[i]);
 	}
+	for(int i=0;i<t.supcount ;i++){
+		fprintf(f,"sup%d=%s\n",i+1,t.sups[i]);
+	}
 }
 void writeoutdb(FILE *f) {
 	int tcount=0;
@@ -194,6 +209,7 @@ void usage(void){
 	printf(" archive: move ticket to todo.old.ini.\n");
 	printf(" workflow: advice on using tt in your workflow.\n");
 	printf(" newscrum: generate a new scrum ticket with $USER as the assignee and set the current scrum to it.\n");
+	printf(" sup: Add a status update to ticket.\n");
 	printf("If scrum is set in global options some reports will be restricted to tickets in that scrum.\n");
 	printf("\n");
 }
@@ -261,7 +277,7 @@ void doticket(int argc, char **argv){
 void closeticket(int argc, char **argv){
 	if(argc<1){printf("USAGE: close ticket\n Move ticket to \"Done\" column.\n"); exit(-1);}
 	int t=indexforname(argv[0]);
-	if(t>0){
+	if(t>=0){
 		tickets[t].state=DONE;
 		tickets[t].ctime=time(NULL);
 	} else printf("No such ticket.\n");
@@ -277,7 +293,12 @@ void reportswimlane(ticket t){
 	for(int i=TODO;i<t.state;i++)
 		printf("\t\t\t\t");
 	if(multiusermode) printf("[%s @ %s : %d]\n",t.name,t.assignee,t.points);
-	if(!multiusermode) printf("[%s : %d]\n",t.name,t.points);
+	if(!multiusermode) printf("[%s : %d]",t.name,t.points);
+	if(t.supcount && t.state != DONE){
+		char *status=t.sups[t.supcount-1];
+		if(status!=NULL&&strlen(status)>0) printf(" (%s)", status);
+	}
+	printf("\n");
 }
 void reportone(ticket t){
 	printf("%s\t%d\t%ld\t%ld\n",t.assignee,t.points,t.ctime-t.otime,t.ctime-t.dtime);
@@ -332,17 +353,27 @@ void stats(void){ //TODO: allow statistics to be reported over sliding time wind
 void comment(int argc,char **argv){
 	if(argc<2){printf("USAGE: comment ticket \"comment\"\n add a short comment to a ticket.\n"); exit(-1);}
 	int t=indexforname(argv[0]);
-	if(t>0){
+	if(t>=0){
 		if( tickets[t].commentcount<MAXCOMMENTS){
 			tickets[t].commentcount++;
-			tickets[t].comments[tickets[t].commentcount-1]=strdup(argv[2]);
+			tickets[t].comments[tickets[t].commentcount-1]=strdup(argv[1]);
 		}else { printf("Too many comments already.\n");exit(-2);}
+	} else {printf("No such ticket.\n");exit(-1);}
+}
+void sup(int argc,char **argv){
+	if(argc<2){printf("USAGE: sup ticket \"sup\"\n Create a status update.\n"); exit(-1);}
+	int t=indexforname(argv[0]);
+	if(t>=0){
+		if( tickets[t].supcount<MAXSUPS){
+			tickets[t].supcount++;
+			tickets[t].sups[tickets[t].supcount-1]=strdup(argv[1]);
+		}else { printf("Too many sups already.\n");exit(-2);}
 	} else {printf("No such ticket.\n");exit(-1);}
 }
 void archive(int argc,char **argv){
 	if(argc<1){printf("USAGE: archive ticket \n Move ticket to %s\n",adbpath); exit(-1);}
 	int t=indexforname(argv[0]);
-	if(t>0){
+	if(t>=0){
 		FILE *f=fopen(adbpath,"a");
 		if(f != NULL) writeoutticket(f,tickets[t]);
 		if(f != NULL && !fclose(f)){
@@ -358,7 +389,7 @@ void wontticket(int argc,char **argv){
 	int t=indexforname(argv[0]);
 	tickets[t].state=WONT;
 	tickets[t].ctime=time(NULL);
-	if(t>0){
+	if(t>=0){
 		FILE *f=fopen(adbpath,"a");
 		if(f != NULL) writeoutticket(f,tickets[t]);
 		if(f != NULL && !fclose(f)){
@@ -389,6 +420,7 @@ void todo(int argc,char **argv){
 	else if(!strcmp(argv[0],"kanban")){report(argc-1,argv+1,1);}
 	else if(!strcmp(argv[0],"report")){report(argc-1,argv+1,0);}
 	else if(!strcmp(argv[0],"comment")){comment(argc-1,argv+1);savedb=1;}
+	else if(!strcmp(argv[0],"sup")){sup(argc-1,argv+1);savedb=1;}
 	else if(!strcmp(argv[0],"archive")){archive(argc-1,argv+1);savedb=1;}
 	else {usage();exit(1);}
 }
