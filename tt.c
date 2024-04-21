@@ -216,7 +216,7 @@ void writeoutdb(FILE *f) {
 }
 void workflow(void) {
 	printf("In kanban mode you should create a ticket as soon as a bug or unit of work is discovered. Before assigning it to a worker, a number of relative \"points\" should be added as an intuitive measure of how difficult the ticket appears. This can help judge the health of the team and help other people make predictions for future work.\n");
-	printf("It's recommended that workers provide a daily status update for thickets using the sup command.\n");
+	printf("It's recommended that workers provide a daily status update for tickets using the sup command.\n");
 	printf("Each day someone (likely a manager/emcee/'scrummaster') should run the kanban command and go through the tickets in the doing column for status updates to discover blocking problems and share advice. The report command may be used periodically to judge organizational effectiveness.\n");
 	printf("Tickets outside the current scope should be put in the BACKLOG state to keep them out of reports.\n");
 	printf("When used with a feature branch worklow on a VCS, branches should be named after the ticket. This way they can be found by running `git branch | grep ticketname`.\n");
