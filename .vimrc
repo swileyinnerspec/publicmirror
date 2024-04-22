@@ -4,7 +4,7 @@
 :set rnu				"relative line numbers
 set list				"Make Whitespace visible
 :set visualbell			"Vim should not touch the bell
-:syntax on				"Rainbows aren't just for the gays
+:syntax on				"Rainbows aren't just for the
 :set so=999				"Cursor should be in the middle of the screen
 :set incsearch			"see next
 :set hlsearch			"Higlhight text as you type search/subst expr
