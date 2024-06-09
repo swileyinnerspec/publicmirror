@@ -20,6 +20,11 @@ img {
 .float {
 	float: left;
 }
+h1 a { color:white; text-decoration: none;}
+h2 a { color:white; text-decoration: none;}
+h3 a { color:white; text-decoration: none;}
+h4 a { color:white; text-decoration: none;}
+h5 a { color:white; text-decoration: none;}
 h1 {
 	text-align: center;	   /* Center align text */
 	padding: 10px 20px;
