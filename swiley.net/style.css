@@ -1,0 +1,47 @@
+body {
+	background-color: grey;
+	color: black;
+}
+
+hr {
+	border: none;
+	height: 2px; /* Adjust height as needed */
+	background-color: #e0e0e0; /* Light grey for the main color */
+	box-shadow: inset 1px 1px 0 #fff, /* Top-left highlight */
+				inset -1px -1px 0 #808080; /* Bottom-right shadow */
+	margin: 20px 0; /* Adjust spacing as needed */
+}
+
+img {
+	border: 3px solid #6495ED; /* Cornflower blue color */
+	box-shadow: 1px 1px 2px #fff, /* Top-left highlight */
+				-1px -1px 2px #000; /* Bottom-right shadow */
+}
+.float {
+	float: left;
+}
+h1 {
+	text-align: center;	   /* Center align text */
+	padding: 10px 20px;
+	margin-left: 10em;
+	margin-right: 10em;
+	background-color: #6495ED; /* Cornflower blue */
+	color: white;
+	text-decoration: none;
+	border: none;
+	box-shadow: inset 1px 1px 0 #fff, /* Top-left highlight */
+				inset -1px -1px 0 #00008B; /* Bottom-right shadow (darker shade of blue) */
+	border-radius: 3px; /* Slightly rounded corners */
+}
+nav a {
+	display: inline-block;
+	padding: 10px 20px;
+	margin: 5px;
+	background-color: #6495ED; /* Cornflower blue */
+	color: white;
+	text-decoration: none;
+	border: none;
+	box-shadow: inset 1px 1px 0 #fff, /* Top-left highlight */
+				inset -1px -1px 0 #00008B; /* Bottom-right shadow (darker shade of blue) */
+	border-radius: 3px; /* Slightly rounded corners */
+}
