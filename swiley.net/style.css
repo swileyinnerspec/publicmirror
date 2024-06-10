@@ -1,6 +1,9 @@
+html { width: 100%; text-align: center; background: gray;}
 body {
-	background-color: grey;
+	background-color: silver;
 	color: black;
+	max-width: 50em;
+	text-align: left;
 }
 
 hr {
@@ -32,7 +35,7 @@ h1 {
 	margin-left: 5em;
 	margin-right: 5em;
 	background-color: #6495ED; 
-	color: white;
+	color: silver;
 	text-decoration: none;
 	border: none;
 	box-shadow: inset 2px 2px 0 #fff, 
