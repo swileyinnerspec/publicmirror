@@ -1,0 +1,42 @@
+<title> Swiley.net </title>
+<nav><a href="/index.html">swiley.net</a><a href="/tt.html">Ticket Tracker</a></nav>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<script src="fixup.js"></script>
+<p> Ticket Tracker is a small program for doing agile style project management. It uses a human writable database in a simple INI-like format that can be versioned in git along with the project being managed. I wrote it after looking for something like this and coming up empty handed. It's probably the most complete among the PIM programs I've written for Linux for similar reasons. The goal is to have something that integrates well into most open source software and independent dev workflows. </p>
+
+<p> Note that while tt has a (somewhat usable) web interface it's designed to be used entirely from the command line. A Next/OSX GUI is planned but has not been started. </p>
+<h2> Installation </h2>
+<p> There are currently no binary packages but you can download ticket tracker from <a href="public.swiley.net/public/tt.c">public.swiley.net/public/tt.c</a> and compile it with <code>cc tt.c -o tt</code> then copy the resulting tt binary to your path. </p> 
+<p> For basic usage tt does not need any other support files.</p>
+ 
+<h2> Usage </h2>
+<p> To add tt to your project touch "todo.ini". Running <code> tt kanban </code> from that directory will now show you a "swimlane" style overview of the currently open tickets. You can change a few settings:<p>
+<ul>
+	<li>multiusermode: if you're on your own set this to zero to declutter the UI.</li>
+	<li>backup: Set this to the backup path. When modifying the database it will first be written here and then moved over the old database. This ensures your tickets will not be corrupted in the (hopefully rare) event of a crash. </li>
+	<li> defaultpoints: This is the default number of points tickets are given if you do not manually use the assign verb. </li>
+	<li> vibecmd: This is the path to your AI agent script that will handle AI delegated tickets. You can ignore it if you're not vibecoding.</li>
+</ul>
+<h3> Verbs </h3>
+<p> The first argument to tt is the "verb" or subcommand. Most subcommands will write the database back. If there are problems with tickets (duplicates, bad fields etc) they will be deleted. You can check to see if the database has these issues with the "check" command by running <code>tt check</code>. If you would like to write the database back without doing any other operations you can use the "normalize" verb (<code>tt normalize</code>.
+<p> Other verbs may take further parameters such as the "show" verb. This requires a ticket name.</p>
+<h3> Basic Kanban </h3>
+<p> Tickets go through a basic lifecycle. They are created, assigned, dequeued, worked, and completed. Let's go through each step and the commands used for them.</p>
+<h4> Ticket Creation </h4>
+<p> <code> tt todo fixthing </code> creates a new ticket with the id "fixthing." It will automatically be set to the "TODO" state enqueuing it for someone to work on.</p>
+<h4> Ticket Assignment </h4>
+<p> <code> tt assign fixthing </code> Will assign a number of points to the ticket. In general these should be a prime number between 1 and 13. They have very little real meaning but you can think of them as "roughly how many days will it probably take." If you're in multi user mode you will also be prompted for an asignee. If you're not sure you can always rerun the assign verb.</p>
+<h4> Dequeuing </h4>
+<p> <code> tt do fixthing </code> will move the ticket from the "TODO" state to the "DOING" state. You should only do this if you're actually working on the ticket. If you change your mind you can always put the ticket back using the todo verb again. This will reset the start time if you're watching that so try to be thoughtful.</p>
+<h4> Working tickets </h4>
+<p> There are two verbs that can be used for tracking your progress as you work on a ticket. </p> 
+<p>The first is "promodoro." this does not modify the database but instead "punches" the ticket in your personal "promodoro.punches" file. It also starts a timer that expires and quits tt afterwards. You can follow tt with an audible alarm so you know when to take a break, if you run this in a while loop you can do full promodoro periods and multitasks between projects.</p>
+<p> The second is "sup" (status update) which simply appends your thoughts to the ticket as a "sup comment." In theory a team disciplined enough to sup once a day could forgo daily standups provided they each take time to monitor sup patches.</p>
+<h4> Ticket Completion </h4>
+<p> Once you've merged your changes for your ticket you can use the "done" verb to close it. </p> 
+<p> Eventually you may want to archive completed tickets to the archive database so they don't clutter the UI. You can do this with <code>tt archive ticketid</code> This will move your ticket to todo.old.ini</p>
+<h3> Vibe Coding </h3>
+<h3> Metrics, Monitoring, and status</h3>
+<p> The two main verbs for viewing overall project status are "kanban" which shows all the tickets in a kanban "swimlane" view and "stats" which give you overall stats for how quickly tickets are worked through various states.</p> <p> I like to have both of these in a watch command along with a number of other PIM tools (like my appointments program) as part of a dashboard.</p>
+
