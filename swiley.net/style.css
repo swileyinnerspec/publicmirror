@@ -1,56 +1,345 @@
-html { width: 100%; text-align: center; background: gray;}
+/*---------------------------------------------------------------------------*/
+/*                           ripped from OpenBSD.org.ru                      */
+/*---------------------------------------------------------------------------*/
+*, *:before, *:after
+{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+:root
+{
+    --button-box-shadow:
+    inset -1px -1px 0px 0px #777,
+    inset -2px -2px 0px 0px #aaa,
+    inset 1px 1px 0px 0px #ddd,
+    inset 2px 2px 0px 0px #fff;
+    --button-hover-bezel:
+    0 0 0 1px #aaa,
+    0 0 0 2px #ddd,
+    0 0 0 3px #000;
+}
+
+/*---------------------------------------------------------------------------*/
+html
+{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    background-image: url("p4.png");
+    background-repeat: repeat;
+    margin: 0;
+    height: 100%;
+    font-family: 'ChicagoFLF', 'Times New Roman', 'Georgia', serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+button
+{
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+a
+{
+    color: #000;
+}
+p { padding: 5px; }
+h1{ padding: 5px; }
+h2{ padding: 5px; }
+h3{ padding: 5px; }
+h4{ padding: 5px; }
+h5{ padding: 5px; }
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+/*---------------------------------------------------------------------------*/
+.draggable
+{
+    /*Helper class for js*/
+}
+/*---------------------------------------------------------------------------*/
 body {
-	background-color: silver;
-	color: black;
-	max-width: 50em;
-	text-align: left;
+    z-index: 2;
+    position: absolute;
+    font-size: 12px;
+    font-weight: normal;
+    width: 20em;
+    min-width:  64px;
+    min-height: 64px;
+
+    padding-bottom: 5px;
+    border-image-slice:  40 40 40 40;
+    border-image-width:  40px 40px 40px 40px;
+    border-image-outset: 3px 4px 4px 3px;
+    border-image-repeat: repeat round;
+    border-style: solid;
+    border-image-source: url("border-image-nobar-blue.png");
+    background-color: #ddd;
+
+    resize: both;
+
+    @supports selector(::-webkit-scrollbar)
+    {
+      border-image-outset: 4px 4px 4px 4px;
+    }
+}
+/*---------------------------------------------------------------------------*/
+
+.win-red.content
+{
+    border-image-source: url("img/border/border-image-nobar.png");
+}
+/*---------------------------------------------------------------------------*/
+.content .panel
+{
+    top:0.25px;
+    @supports selector(::-webkit-scrollbar)
+    {
+      top:0px;
+    }
+
+    size:100% 19px;
+    position: sticky;
+    padding-bottom:2px;
+    background-size: 100% 100%;
+    background-image: url("img/bar/bar.png");
+    background-repeat: no-repeat;
+    background-position:top top;
+}
+/*---------------------------------------------------------------------------*/
+.win-blue .panel
+{
+    background-image: url("img/bar/bar-blue.png");
 }
 
-hr {
-	border: none;
-	height: 4px; 
-	background-color: #e0e0e0; 
-	box-shadow: inset 1px 1px 0 #fff, 
-				inset -1px -1px 0 #808080; 
-	margin: 20px 0; 
+.win-red .panel
+{
+    background-image: url("img/bar/bar.png");
 }
 
-img {
-	border: 3px solid #6495ED; 
-	box-shadow: 2px 2px 4px #fff, 
-				-2px -2px 4px #000; 
-	margin: 0.5em;
+/*---------------------------------------------------------------------------*/
+.content .inner
+{
+    overflow-y: auto;
+    background-color: #ddd;
+    padding: 5px;
+    height:100%;
+    width:100%;
 }
-.float {
-	float: left;
+
+.title
+{
+    color:#bebebe;
+    width: 100%;
+    text-align: center;
+    font-size: inherit;
+    font-weight: inherit;
+    padding: 1px 0;
+    margin: 0 0 0 0;
 }
-h1 a { color:white; text-decoration: none;}
-h2 a { color:black; text-decoration: none;}
-h3 a { color:black; text-decoration: none;}
-h4 a { color:black; text-decoration: none;}
-h5 a { color:black; text-decoration: none;}
-h1 {
-	text-align: center;	   
-	padding: 0.25em 1em;
-	margin-left: 5em;
-	margin-right: 5em;
-	background-color: #6495ED; 
-	color: silver;
-	text-decoration: none;
-	border: none;
-	box-shadow: inset 2px 2px 0 #fff, 
-				inset -2px -2px 0 #00008B; 
-	border-radius: 5px; 
+
+.content .icon
+{
+    text-align: center;
+    margin: 1px 0;
+}
+
+.content ul
+{
+    list-style-type: none;
+    margin: 2px 0 1.5em 0;
+    padding: 0 0 0 2em;
+    font-size: 12px;
+}
+
+.footer
+{
+    width: 400px;
+    text-align: center;
+    margin: 2em auto 0;
+    font-size: 12px;
+}
+/*---------------------------------------------------------------------------*/
+.control-box
+{
+    position: absolute;
+    padding: 1px;
+}
+/*---------------------------------------------------------------------------*/
+nav
+{
+    height:18px;
+    background-image: url("bar-blue.png");
+	padding-left: 4px;
 }
 nav a {
-	display: inline-block;
-	padding: 0.25em 1em;
-	margin: 5px;
-	background-color: #6495ED; 
+	text-color: white;
 	color: white;
-	text-decoration: none;
-	border: none;
-	box-shadow: inset 1px 1px 0 #fff, 
-				inset -1px -1px 0 #00008B; 
-	border-radius: 5px; 
 }
+
+.icon-box.control-box:active
+{
+    background-image: url("img/controls/icon-control-button-pressed.png");
+}
+
+.icon-box.inner
+{
+  /*For compability*/
+}
+/*---------------------------------------------------------------------------*/
+.win-blue .icon-box.control-box
+{
+    background-image: url("img/controls/icon-control-button-blue.png");
+}
+.win-red .icon-box.control-box
+{
+    background-image: url("img/controls/icon-control-button.png");
+}
+.win-blue .icon-box.control-box:active
+{
+    background-image: url("img/controls/icon-control-button-blue-pressed.png");
+}
+.win-red .icon-box.control-box:active
+{
+    background-image: url("img/controls/icon-control-button-pressed.png");
+}
+/*---------------------------------------------------------------------------*/
+.control-box-inner:active
+{
+    box-shadow: none;
+}
+
+.control-box-inner
+{
+  /*For compability*/
+}
+/*---------------------------------------------------------------------------*/
+.close-box.control-box
+{
+
+    height:18px;
+    width: 24px;
+    background-image: url("img/controls/close-control-button.png");
+    right: 20px;
+}
+
+.close-box.control-box:active
+{
+    background-image: url("img/controls/close-control-button-pressed.png");
+}
+
+.close-box-inner
+{
+  /*For compability*/
+}
+/*---------------------------------------------------------------------------*/
+.win-blue *.close-box.control-box
+{
+    background-image: url("img/controls/close-control-button-blue.png");
+}
+.win-red *.close-box.control-box
+{
+    background-image: url("img/controls/close-control-button.png");
+}
+.win-blue *.close-box.control-box:active
+{
+    background-image: url("img/controls/close-control-button-blue-pressed.png");
+}
+.win-red *.close-box.control-box:active
+{
+    background-image: url("img/controls/close-control-button-pressed.png");
+}
+/*---------------------------------------------------------------------------*/
+.maximize-box.control-box
+{
+    right: 0px;
+    height:18px;
+    width: 20px;
+    background-image: url("img/controls/maximize-control-button.png");
+}
+
+.maximize-box.control-box:active
+{
+    background-image: url("img/controls/maximize-control-button-pressed.png");
+}
+
+.maximize-box-inner
+{
+  /*For compability*/
+}
+/*---------------------------------------------------------------------------*/
+.win-blue *.maximize-box.control-box
+{
+    background-image: url("img/controls/maximize-control-button-blue.png");
+}
+.win-red *.maximize-box.control-box
+{
+    background-image: url("img/controls/maximize-control-button.png");
+}
+.win-blue *.maximize-box.control-box:active
+{
+    background-image: url("img/controls/maximize-control-button-blue-pressed.png");
+}
+.win-red *.maximize-box.control-box:active
+{
+    background-image: url("img/controls/maximize-control-button-pressed.png");
+}
+/*---------------------------------------------------------------------------*/
+.content .command_button
+{
+    height: 22px;
+    background-color: #dedede;
+    display: inline-block;
+    margin-bottom: 7px;
+    margin-left: 14px;
+    border-radius: 3px;
+    border: 1px solid #000;
+    box-shadow: var(--button-box-shadow);
+}
+
+.content .command_button:hover
+{
+    box-shadow:
+    var(--button-box-shadow),
+    var(--button-hover-bezel);
+}
+
+.content .command_button:active
+{
+    color: #fff;
+    background-color: #666;
+    box-shadow:
+    var(--button-hover-bezel),
+    inset -1px -1px 0px 0px #888,
+    inset -2px -2px 0px 0px #777,
+    inset 1px 1px 0px 0px #444,
+    inset 2px 2px 0px 0px #555;
+}
+/*---------------------------------------------------------------------------*/
+/*Hide only visually, but have it available for screenreaders & for SEO purps*/
+/*---------------------------------------------------------------------------*/
+.visuallyhidden
+{
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.clearfix:before, .clearfix:after
+{
+    content: " ";
+    display: table;
+}
+
+.clearfix:after
+{
+    clear: both;
+}
+/*---------------------------------------------------------------------------*/
