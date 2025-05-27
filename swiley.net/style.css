@@ -65,7 +65,7 @@ body {
     position: absolute;
     font-size: 12px;
     font-weight: normal;
-    width: 20em;
+    width: 40em;
     min-width:  64px;
     min-height: 64px;
 
@@ -177,6 +177,7 @@ nav
 nav a {
 	text-color: white;
 	color: white;
+	padding-left: 4px;
 }
 
 .icon-box.control-box:active
