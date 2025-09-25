@@ -7,7 +7,7 @@ function update {
 	git branch -r | grep -v '\->' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
 	git fetch --all
 	git pull
-	echo "<title>Public data for mail.swiley.net</title><h1>Readme.html</h1>">./.head.html
+	echo "<meta charset='UTF-8'><title>Repository</title><h1>Readme.html</h1>">./.head.html
 	cat .head.html readme.html >.index.html
 	rm .head.html
 	rm branches.html
