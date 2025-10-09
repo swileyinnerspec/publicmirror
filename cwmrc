@@ -1,0 +1,51 @@
+ignore xclock
+ignore xbiff
+ignore battery
+
+moveamount 4
+bind-key 4-h pointer-move-left-big
+bind-key 4-j pointer-move-down-big
+bind-key 4-k pointer-move-up-big
+bind-key 4-l pointer-move-right-big
+
+bind-key 4S-h pointer-move-left
+bind-key 4S-j pointer-move-down
+bind-key 4S-k pointer-move-up
+bind-key 4S-l pointer-move-right
+
+bind-key 4-1 "xdotool click 1"  # Left-click
+bind-key 4-2 "xdotool click 2"  # Middle-click
+bind-key 4-3 "xdotool click 3"  # Right-click
+bind-key 4-4 "highlight-pointer -r 30 -o 5 -t2 --key-quit q"  # highlight
+
+bind-key C4S-r "sh -c \"xdotool getmouselocation | sed 's/x:\(.*\) y:\(.*\) screen:.*/\1 \2/' >>~/mousecoords\""
+
+sticky yes
+bind-key 4-t "xterm -bg grey -e 'btop || htop'"
+bind-key 4-s "xterm -bg white -e scrot -s \"$(read).png\""
+bind-key 4-S "descwin 'describe this window' | tee ./aiout | xsel -b;  festival --tts <./aiout"
+bind-key 4-V "xterm -bg white -e \"camai 'describe this' | tee /dev/tty | tee aiout | festival --tts ; xsel -b <aiout; sleep 5\""
+bind-key 4-u "xterm -bg pink -e su -"
+bind-key 4-f "firefox"
+bind-key 4-F "killall firefox && rm -rf ~/.mozilla"
+bind-key 4-m "xterm -bg lightyellow -e mutt -F ~/.mutt/muttrc -f /var/mail/swiley"
+bind-key 4-a "xterm -fs 20 -T 'verbal chat' -bg black -fg cyan -e talkai"
+bind-key 4-e "xterm -fs 20 -T 'qwen chat' -bg black -fg pink -e eai"
+bind-key 4M-a "xterm -fs 20 -T 'qwen chat' -bg black -fg orange -e ./aicode.txt"
+
+bind-key 4-v "xterm -bg black alsamixer"
+bind-key 4-P "xterm -bg black -fg darkblue ipython3"
+bind-key 4-p "xterm -bg black -fg darkblue ipython3"
+bind-key 4-z "xmag -mag 2 -source 400x200"
+bind-key 4-Z "kmag"
+bind-key CM-Return "xterm -fs 10"
+command term /usr/bin/xterm
+command lock "xscreensaver-command --lock"
+color activeborder blue
+color inactiveborder grey
+color urgencyborder red
+color ungroupborder yellow
+ignore xclock
+ignore xbiff
+ignore battery
+gap 0 0 0 20
