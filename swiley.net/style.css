@@ -24,8 +24,6 @@
 /*---------------------------------------------------------------------------*/
 html
 {
-    -moz-user-select: none;
-    -webkit-user-select: none;
     background-image: url("p4.png");
     background-repeat: repeat;
     margin: 0;
