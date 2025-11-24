@@ -1,0 +1,13 @@
+set sendmail="/home/swiley/stuff/sendmail.sh "
+set from=swiley@swiley.net
+set realname="Stephen Wiley"
+set editor=nvim
+set folder="~/Mail"
+set record="~/Mail/sent"
+set postponed="~/Mail/drafts"
+set sort = threads
+set sort_aux = last-date-received
+exec collapse-all
+#set auto_subscribe = yes
+set beep_new = yes
+set uncollapse_new = no
