@@ -76,21 +76,23 @@ function! SpeakChar() abort
 				\ ']': 'right bracket',
 				\ '+': 'plus',
 				\ '-': 'minus',
+				\ '_': 'underscore',
 				\ '*': 'asterisk',
 				\ '/': 'slash',
 				\ '\': 'backslash',
 				\ '=': 'equals',
 				\ '"': 'double quote',
 				\ "'": 'single quote',
-				\ "a": 'Ay',
-				\ "A": 'Ay'
+				\ "`": 'backtick',
+				\ "a": 'Ahy',
+				\ "A": 'Ahy'
 				\ }
 
 	if has_key(l:punct, l:char)
 		let l:char = l:punct[l:char]
 	endif
 
-	call system('echo "' . l:char . '" | festival --tts &')
+	call system('echo "' . l:char . '" | espeak -s280 &')
 endfunction
 
 function! SpeakWord() abort
@@ -99,18 +101,18 @@ function! SpeakWord() abort
 	if l:word ==# ''
 		let l:word = 'blank'
 	endif
-	call system('echo "' . l:word . '" | festival --tts &')
+	call system('echo "' . l:word . '" | espeak -s280 &')
 	let g:suppress_mode_tts = 0
 endfunction
 
 function! SpeakPos() abort
-	call system('echo "Line ' . line('.') . ' of ' . line('$') . '" | festival --tts &')
+	call system('echo "Line ' . line('.') . ' of ' . line('$') . '" | espeak -s280 &')
 endfunction
 
 function! ReadLastMessage() abort
 	let current_message = execute("1messages")
 	let current_message = substitute(current_message, "\n", " ", "g")
-	call system('echo "' . escape(current_message,'#') . '" | festival --tts &')
+	call system('echo "' . escape(current_message,'#') . '" | espeak -s280 &')
 	echo current_message
 endfunction
 
@@ -126,7 +128,7 @@ function! SpeakSearchCount() abort
 	if v:event.cmdtype == '/' || v:event.cmdtype == '?'
 		let matches = searchcount({'maxcount':0})
 		let msg = printf("match %d of %d matches", matches.current, matches.total)
-		call system('echo "' . msg . '" | festival --tts &')
+		call system('echo "' . msg . '" | espeak -s280 &')
 	endif
 endfunction
 
@@ -136,7 +138,7 @@ endfunction
 function! SpeakSearchCountForKey() abort
 	let matches = searchcount({'maxcount':0})
 	let msg = printf("match %d of %d matches", matches.current, matches.total)
-	call system('echo "' . msg . '" | festival --tts &')
+	call system('echo "' . msg . '" | espeak -s280 &')
 endfunction
 
 
@@ -148,7 +150,7 @@ function! SpeakBufferName() abort
 	if l:bufname ==# ''
 		let l:bufname = '[No Name]'
 	endif
-	call system('echo "' . l:bufname . '" | festival --tts &')
+	call system('echo "' . l:bufname . '" | espeak -s280 &')
 endfunction
 
 
@@ -173,8 +175,8 @@ nnoremap <M-f> :SpeakPos<CR>
 nnoremap <M-m> :call ReadLastMessage()<CR>
 nnoremap <M-d> :echom system('date') <CR>
 
-nnoremap <M-s> :silent .write !festival --tts<CR>
-nnoremap <M-S> :silent execute 'silent !echo line ' . line('.') . " \| festival --tts"<CR>
+nnoremap <M-s> :silent .write !espeak -s280<CR>
+nnoremap <M-S> :silent execute 'silent !echo line ' . line('.') . " \| espeak -s280"<CR>
 
 vnoremap <M-y> :silent '<,'>write !xsel -b<CR>
 nnoremap <M-y> :silent .write !xsel -b<CR>
@@ -198,4 +200,4 @@ augroup END
 
 autocmd VimEnter * call timer_start(300, 'CheckMessages', {'repeat': -1})
 
-"autocmd ModeChanged *   if !exists('g:suppress_mode_tts') || !g:suppress_mode_tts | call system('echo "Mode ' . mode() . '" | festival --tts &')
+"autocmd ModeChanged *   if !exists('g:suppress_mode_tts') || !g:suppress_mode_tts | call system('echo "Mode ' . mode() . '" | espeak -s280 &')
