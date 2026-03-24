@@ -1,0 +1,170 @@
+# Minimal FVWM configuration
+SloppyFocus
+
+# Use MWM-style window decorations
+MenuStyle * fvwm, Foreground white, Background cornflowerblue, Greyed grey40
+Style *           HilightFore black, HilightBack cornflowerblue
+Style * MWMDecor, MWMFunctions, HintOverride
+Style FvwmPager StaysOnTop, Sticky, NoTitle
+Style *           TileCascadePlacement
+
+# Define active/inactive colors
+Colorset 1 fg black, bg grey30
+Colorset 2 fg white, bg cornflowerblue
+
+# Apply colorsets conditionally
+Style * Colorset 1, HilightColorset 2
+Style * BorderColorset 1, HilightBorderColorset 2
+Style * HandleColorset 1, HilightHandleColorset 2
+
+# Initialize the pager (a desktop overview)
+DestroyModuleConfig FvwmPager: *
+*FvwmPager: Geometry 100x100-0-0
+Module FvwmPager
+
+# Window operations menu function
+DestroyFunc FuncFvwmWindowCommon
+AddToFunc FuncFvwmWindowCommon
++ I AddToMenu $0 "$[gt.&Move]"              Move
++ I AddToMenu $0 "$[gt.&Resize]"            Resize
++ I AddToMenu $0 "$[gt.R&aise]"             Raise
++ I AddToMenu $0 "$[gt.&Lower]"             Lower
++ I AddToMenu $0 "$[gt.(De)&Iconify]"       Iconify
++ I AddToMenu $0 "$[gt.(Un)&Stick]"         Stick
++ I AddToMenu $0 "$[gt.(Un)Ma&ximize]"      Maximize
++ I AddToMenu $0 ""                         Nop
++ I AddToMenu $0 "$[gt.&Delete]"            Delete
++ I AddToMenu $0 "$[gt.&Close]"             Close
++ I AddToMenu $0 "$[gt.Destroy]"            Destroy
++ I AddToMenu $0 ""                         Nop
+
+DestroyMenu MenuFvwmWindowOps2
+AddToMenu MenuFvwmWindowOps2
+FuncFvwmWindowCommon MenuFvwmWindowOps2
++ "Scroll&Bar"       Module FvwmScroll 2 2
++ "&$[gt.Print]"           FuncFvwmPrint
++ "$[gt.Print Re&verse]" FuncFvwmPrintReverse
+
+# Window list menu
+DestroyMenu WindowListMenu
+AddToMenu WindowListMenu "Window List" Title
++ DynamicPopupAction Function MakeWindowListMenu
+
+DestroyFunc MakeWindowListMenu
+AddToFunc MakeWindowListMenu
++ I DestroyMenuAndReload WindowListMenu
++ I AddToMenu WindowListMenu "Window List" Title
++ I All (CurrentPage, !Iconic) AddToMenu WindowListMenu "&$[w.name]" WindowListFunc
+
+DestroyFunc WindowListFunc
+AddToFunc WindowListFunc
++ I Iconify off
++ I Focus
++ I Raise
++ I WarpToWindow 50 50
+
+# Basic menu configuration
+DestroyMenu MenuFvwmRoot
+AddToMenu MenuFvwmRoot "Root Menu" Title
++ "XTerm" Exec exec xterm
++ "Firefox" Exec exec firefox
++ "" Nop
++ "Window List" Popup WindowListMenu
++ "" Nop
++ "Restart FVWM" Restart
++ "Exit FVWM" Quit
+
+# Bind the root menu to right-click on the root window
+Mouse 3 R A Menu MenuFvwmRoot
+
+# Window search function (fixed)
+DestroyFunc SearchWindowsByTitle
+AddToFunc SearchWindowsByTitle
++ I WindowList (CurrentPage) NoGeometry, SelectOnRelease Alt_L
+
+# Mouse bindings
+Mouse 0 1       A       Menu MenuFvwmWindowOps2 Close
+Mouse 1 F       A       FuncFvwmResizeOrRaise
+Mouse 1 TS      A       FuncFvwmMoveOrRaise
+Mouse 1 I       A       FuncFvwmMoveOrIconify
+Mouse 2 I       A       Iconify
+Mouse 2 FST     A       Menu MenuFvwmWindowOps2 Nop
+Mouse 3 TSIF    A       RaiseLower
+
+# Basic keybindings
+Key F1 R A Menu MenuFvwmRoot
+Key F2 R A Exec exec xterm
+
+# Fixed Alt+/ window search binding
+Key slash R M SearchWindowsByTitle
+
+# CWM-style keybindings for window management
+# Move window (Alt+hjkl)
+Key h A M MoveToPage -1p +0p
+Key j A M Lower
+Key k A M Raise
+Key l A M MoveToPage +1p +0p
+
+# Resize windows (Alt+Shift+hjkl)
+Key h A SM Resize w-10 keep
+Key j A SM Resize keep w+10
+Key k A SM Resize keep w-10
+Key l A SM Resize w+10 keep
+
+# Move windows in pixels (Alt+Ctrl+hjkl)
+Key h A CM Move w-10 keep
+Key j A CM Move keep w+10
+Key k A CM Move keep w-10
+Key l A CM Move w+10 keep
+
+# Maximize functions (Alt+m for different directions)
+Key m A M Maximize 100 100
+Key comma A M Maximize 0 100  # Vertical maximize
+Key period A M Maximize 100 0 # Horizontal maximize
+
+# Hide/Show windows (Alt+period for iconify)
+Key minus A M Iconify
+
+# Cycle through windows (Alt+Tab)
+Key Tab A M Next (CurrentPage, !Iconic) Focus
+Key Tab A SM Prev (CurrentPage, !Iconic) Focus
+
+# Close window (Alt+Shift+c)
+Key c A SM Close
+
+# Kill window (Alt+Shift+x)
+Key x A SM Destroy
+
+# Window styles
+Style * SloppyFocus, BorderWidth 4, HandleWidth 4
+
+# Title bar buttons
+Mouse 0 1       A       Menu MenuFvwmWindowOps2 Close
+Mouse 0 2       A       FuncFvwmMaximize
+Mouse 0 4       A       Iconify
+
+# Set up virtual desktops
+DesktopSize 2x2
+
+# Move/Raise functions
+DestroyFunc FuncFvwmMoveOrRaise
+AddToFunc FuncFvwmMoveOrRaise
++ I Raise
++ M Move
++ D Lower
+
+DestroyFunc FuncFvwmResizeOrRaise
+AddToFunc FuncFvwmResizeOrRaise
++ I Raise
++ M Resize
++ D Lower
+
+DestroyFunc FuncFvwmMaximize
+AddToFunc FuncFvwmMaximize
++ I Maximize 100 100
+
+DestroyFunc FuncFvwmMoveOrIconify
+AddToFunc FuncFvwmMoveOrIconify
++ I Raise
++ M Move
++ D Iconify
