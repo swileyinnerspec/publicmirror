@@ -41,7 +41,7 @@ Note that I'm running llama-server with just one slot. I do this for multiple re
 
 <p> It *does* check the environment for OPENAI_API_BASE and OPENAI_API_KEY. Additionally you can use the "SYSTEM" environment variable for the default system prompt. The built in one instructs the model to create an agentnotes.md file which, if it exists, will replace the entire system prompt (even one in the env var.)</p>
 
-<p> I'd strongly encourage you to run it under its own user account. This is how I've been using agents (partly because I don't want any nodejs packages installed under my account and partly because I want strong isolation so the LLM doesn't go flinging credentials out to the web or deleting anything important.) I do this though and just this single line shell script:</p> 
+<p> I'd strongly encourage you run it under its own user account. This is how I've been using agents (partly because I don't want any nodejs packages installed under my account and partly because I want strong isolation so the LLM doesn't go flinging credentials out to the web or deleting anything important.) for agent.py I just this single line shell script:</p> 
 
 <code><pre>
 #!/usr/bin/bash
@@ -54,7 +54,7 @@ sudo -u llm agent.py $*
 
 <h2> Experience using it with gemma </h2>
 
-<p> The main reason I revamped my agent harness was that I kept hitting the codex limits at work (I've been rewritting this kind of crazy FPGA driver where both the bitfile and driver/network server were written by someone who's no longer at the company so pulling everything apart took a ton of work, I don't think I could have done it in just a couple weeks if I didn't have an agent, but the small quota and the rugpull potential from OpenAI (not to mention the infosec implications) gives me a bit of anxiety using it.</p>
+<p> The main reason I revamped my agent harness was that I kept hitting the codex limits at work. I've been rewriting this kind of crazy FPGA driver where both the bitfile and driver/network server were written by someone who's no longer at the company so pulling everything apart took a ton of work, I don't think I could have done it in just a couple weeks if I didn't have an agent, but the small quota and the rugpull potential from OpenAI (not to mention the infosec implications) gives me a bit of anxiety using it.</p>
 
 <p> Gemma4 is incredibly fast. I get almost 20 tokens per second on my pocket sized Chinese netbook using the smallest version. It's honestly a little incredible seeing a model that only needs a couple GB of RAM making such effective tool calls too. I really can't believe how good it is.</p>
 
